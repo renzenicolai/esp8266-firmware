@@ -1,0 +1,62 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>RN+ WiFi switch</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="tinycolorpicker.css" type="text/css" media="screen"/>
+  <script type="text/javascript" src="tinycolorpicker.min.js"></script>
+    <script type="text/javascript">
+      function get(url) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send();
+        return xmlhttp.responseText;
+      }
+      function sendcolor() {
+        var color = document.getElementById("colorInput").value;
+        color = color.slice( 1 );
+        get("pwmset?color=" + color + "&cmd=1");
+      }
+        window.onload = function()
+        {
+            var $picker = document.getElementById("colorPicker");
+            var picker  = tinycolorpicker($picker);
+            document.addEventListener("change",sendcolor,false);
+        }
+    </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<div class='home'>
+  <div class='row'><div class='left'>Color</div><div class='right'>
+    <div id="colorPicker">
+      <a class="color"><div class="colorInner"></div></a>
+      <div class="track"></div>
+      <ul class="dropdown"><li></li></ul>
+      <input type="hidden" id="colorInput" class="colorInput" change="sendcolor()"/>
+    </div>
+  </div></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>RN+ WiFi switch</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="140medley.min.js"></script>
+  <script type="text/javascript">
+    
+  window.onload=function(e) {
+    timezoneset();
+    bootstateset();
+    pkawbset();
+  };
+    
+  function timezoneset() {
+    var items = document.getElementsByClassName('tz_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%timezone%') items[i].selected = true;
+    }
+  }
+  
+  function bootstateset() {
+    var items = document.getElementsByClassName('bs_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%bootstate%') items[i].selected = true;
+    }
+  }
+
+  function pkawbset() {
+    var items = document.getElementsByClassName('wb_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%pka_wb%') items[i].selected = true;
+    }
+  }
+
+  function removeOptions(selectbox)
+  {
+      var i;
+      for(i=selectbox.options.length-1;i>=0;i--)
+      {
+          selectbox.remove(i);
+      }
+  }
+  </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<div id='notsetupwarning' class='home warning %hidewarning%'>
+<div class='row'>
+  <div class='left bold'>Welcome!</div>
+  <div class='right'>&nbsp;</div>
+</div>
+<div class='row'>
+  <div class='left'>Please configure the wifi settings in the wifi setup.</div>
+  <div class='right'><a class='button' href='/wifi'>Go to setup</a></div>
+</div>
+</div>
+
+<form name="settings" action='/settings/store' method='post'>
+<div class='home wide'>
+  <!-- <div class='row'><div class='left'>MDNS</div><div class='right'><input type='checkbox' name='enable_mdns' value='1'%enable_mdns%></div></div>
+  <div class='row'><div class='left'>NTP</div><div class='right'><input type='checkbox' name='enable_ntp' value='1'%enable_ntp%></div></div>
+  <div class='row'><div class='left'>NTP server</div><div class='right'><input type='text' name='ntpserver' value='%ntp_server%'></div></div>
+  <div class='row'><div class='left'>Timezone</div>
+    <div class='right'>
+    <select name="timezone" style="width: 100px;">
+      <option value="0" class="tz_option">GMT -12</option>
+      <option value="1" class="tz_option">GMT -11</option>
+      <option value="2" class="tz_option">GMT -10</option>
+      <option value="3" class="tz_option">GMT -09</option>
+      <option value="4" class="tz_option">GMT -08</option>
+      <option value="5" class="tz_option">GMT -07</option>
+      <option value="6" class="tz_option">GMT -06</option>
+      <option value="7" class="tz_option">GMT -05</option>
+      <option value="8" class="tz_option">GMT -04</option>
+      <option value="9" class="tz_option">GMT -03</option>
+      <option value="10" class="tz_option">GMT -02</option>
+      <option value="11" class="tz_option">GMT -01</option>
+      <option value="12" class="tz_option">GMT</option>
+      <option value="13" class="tz_option">GMT +01</option>
+      <option value="14" class="tz_option">GMT +02</option>
+      <option value="15" class="tz_option">GMT +03</option>
+      <option value="16" class="tz_option">GMT +04</option>
+      <option value="17" class="tz_option">GMT +05</option>
+      <option value="18" class="tz_option">GMT +06</option>
+      <option value="19" class="tz_option">GMT +07</option>
+      <option value="20" class="tz_option">GMT +08</option>
+      <option value="21" class="tz_option">GMT +09</option>
+      <option value="22" class="tz_option">GMT +10</option>
+      <option value="23" class="tz_option">GMT +11</option>
+      <option value="24" class="tz_option">GMT +12</option>
+      <option value="25" class="tz_option">GMT +13</option>
+      <option value="26" class="tz_option">GMT +14</option>
+    </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>Automatic summertime</div>
+    <div class='right'><input type='checkbox' name='enable_summertime' value='1'%ntp_summer%></div>
+  </div> -->
+  <div class='row'><div class='left'>Device name</div><div class='right'><input type='text' name='name' value='%name%'></div></div>
+  <div class='row'><div class='left'>State of outputs after power-loss</div>
+    <div class='right'>
+      <select name="bootstate">
+        <option value="0" class="bs_option">All outputs off</option>
+        <option value="1" class="bs_option">Output 1 on</option>
+        <option value="2" class="bs_option">Output 2 on</option>
+        <option value="4" class="bs_option">Output 3 on</option>
+        <option value="3" class="bs_option">Output 1 and 2 on</option>
+        <option value="5" class="bs_option">Output 1 and 3 on</option>
+        <option value="6" class="bs_option">Output 2 and 3 on</option>
+        <option value="7" class="bs_option">All outputs on</option>
+      </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>Window blinds control</div>
+    <div class='right'>
+      <select name="pka_wb">
+        <option value="0" class="wb_option">Disabled</option>
+        <option value="1" class="wb_option">Up/Down on output 1, direction on output 2</option>
+        <option value="2" class="wb_option">Up/Down on output 1, direction on output 3</option>
+        <option value="3" class="wb_option">Up/Down on output 2, direction on output 1</option>
+        <option value="4" class="wb_option">Up/Down on output 2, direction on output 3</option>
+        <option value="5" class="wb_option">Up/Down on output 3, direction on output 1</option>
+        <option value="6" class="wb_option">Up/Down on output 3, direction on output 2</option>
+      </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>&nbsp;&nbsp;&nbsp;&nbsp;<i>Time</i></div>
+    <div class='right'>
+      <h3>&nbsp;Seconds</h3>
+    </div>
+    <div class='right'>
+      <input type='text' name='pka_wb_time' value='%pka_wb_time%' size='3' />
+    </div>
+  </div>
+  <!-- <div class='row'><div class='left'>System password</div><div class='right'><input type='text' name='device_password' value='%device_password%'></div></div> -->
+  <div class='row'>&nbsp;</div>
+  <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Save configuration</button></div></div>
+</div>
+</form>
+<br /><br />
+</body>
+</html>
