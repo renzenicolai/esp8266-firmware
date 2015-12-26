@@ -1,7 +1,7 @@
 #ifndef WIFI_H
 #define WIFI_H
 
-  #define WIFI_SETTINGS_VERSION 1
+  #define WIFI_SETTINGS_VERSION 2
   typedef struct __attribute__((packed, aligned(4))) { //Size must always be a multiple of 4!
     //Info about stored data
     uint8_t magic;
@@ -25,6 +25,14 @@
     uint8_t static_netmask_2;
     uint8_t static_netmask_3;
     uint8_t static_netmask_4;
+    uint8_t static_dns_1;
+    uint8_t static_dns_2;
+    uint8_t static_dns_3;
+    uint8_t static_dns_4;
+    uint8_t static_altdns_1;
+    uint8_t static_altdns_2;
+    uint8_t static_altdns_3;
+    uint8_t static_altdns_4;
   } wifiSettings_t;
 
   void wifiInit( void ); //Call after boot
@@ -44,5 +52,8 @@
   bool wifiGetConnectionTest( void ); //Returns true while system tries to connect to configured AP
   bool wifiGetConnectionTestEnded( void ); //Returns true when system stopped trying to connect to the configured AP
   bool wifiGetConnectionResult( void ); //Returns true when connection to AP was succesfull, returns false when failed.
+  bool wifiGetSetupActive( void ); //Returns weither or not the setup mode is active
+  void mdnsStart( void );
+  int send_udp( uint8_t* server, int port, char* data, uint16 length );
 
 #endif

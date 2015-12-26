@@ -177,7 +177,9 @@ void ICACHE_FLASH_ATTR board_init( void )
   #endif
   gpio_output_set(output_init_high, output_init_low, output_pins, input_pins);
 
+  #ifdef ENABLE_PKAWB
   board_wbInit();
+  #endif
 
   #ifdef I2C_EN
     i2c_master_gpio_init();
@@ -272,19 +274,19 @@ void ICACHE_FLASH_ATTR board_init( void )
   os_timer_arm(&sensorUpdateTimer, 2000, 1);
 
   #ifdef I2S_WS2812
-    os_printf("WS8212_INIT\n\r");
+    //os_printf("WS8212_INIT\n\r");
     ws2812_init();
     ws2812_amount_of_leds = 150;
     os_printf("MALLOC\n\r");
     ws2812_buffer = (uint8_t*) os_malloc(ws2812_amount_of_leds*3);
     if (ws2812_buffer!=NULL) {
-      os_printf("MALLOC OK\n\r");
+      //os_printf("MALLOC OK\n\r");
       uint16_t i;
       for (i = 0; i < (ws2812_amount_of_leds*3); i++) {
         //os_printf("%d\n\r", i);
         ws2812_buffer[i] = 0;
        }
-      os_printf("BUFFER INIT OK\n\r");
+      //os_printf("BUFFER INIT OK\n\r");
       ws2812_push( ws2812_buffer, ws2812_amount_of_leds*3 );
       board_ws2812_rainbow_init();
       board_ws2812_rainbow( true, 1 );
@@ -475,29 +477,30 @@ bool ICACHE_FLASH_ATTR board_getInput( uint8_t input )
 
   #ifdef I2C_MCP
     uint8_t mcp = MCP23008_getAll();
+    //os_printf("mcp = %d, input = %d.\n\r", mcp, input);
     #if BUTTON1>=94 && BUTTON1<98
-      if ((mcp&(1<<(BUTTON1-94+3)))&&(input==0)) return true;
+      if ((mcp&(1<<(BUTTON1-94+4)))&&(input==0)) return true;
     #endif
     #if BUTTON2>=94 && BUTTON2<98
-      if ((mcp&(1<<(BUTTON2-94+3)))&&(input==1)) return true;
+      if ((mcp&(1<<(BUTTON2-94+4)))&&(input==1)) return true;
     #endif
     #if BUTTON3>=94 && BUTTON3<98
-      if ((mcp&(1<<(BUTTON3-94+3)))&&(input==2)) return true;
+      if ((mcp&(1<<(BUTTON3-94+4)))&&(input==2)) return true;
     #endif
     #if BUTTON4>=94 && BUTTON4<98
-      if ((mcp&(1<<(BUTTON4-94+3)))&&(input==3)) return true;
+      if ((mcp&(1<<(BUTTON4-94+4)))&&(input==3)) return true;
     #endif
     #if BUTTON5>=94 && BUTTON5<98
-      if ((mcp&(1<<(BUTTON5-94+3)))&&(input==4)) return true;
+      if ((mcp&(1<<(BUTTON5-94+4)))&&(input==4)) return true;
     #endif
     #if BUTTON6>=94 && BUTTON6<98
-      if ((mcp&(1<<(BUTTON6-94+3)))&&(input==5)) return true;
+      if ((mcp&(1<<(BUTTON6-94+4)))&&(input==5)) return true;
     #endif
     #if BUTTON7>=94 && BUTTON7<98
-      if ((mcp&(1<<(BUTTON7-95+3)))&&(input==6)) return true;
+      if ((mcp&(1<<(BUTTON7-94+4)))&&(input==6)) return true;
     #endif
     #if BUTTON8>=94 && BUTTON8<98
-      if ((mcp&(1<<(BUTTON8-95+3)))&&(input==7)) return true;
+      if ((mcp&(1<<(BUTTON8-94+4)))&&(input==7)) return true;
     #endif
   #endif
   return false;
@@ -671,7 +674,7 @@ void ICACHE_FLASH_ATTR statusLedTimerStop( void )
 void ICACHE_FLASH_ATTR board_statusLed( uint8_t mode )
 {
   #if LED>0
-    os_printf("Statusled 1 set to %d\n\r", mode);
+    //os_printf("Statusled 1 set to %d\n\r", mode);
     switch (mode)
     {
       case 0:
@@ -731,7 +734,7 @@ void ICACHE_FLASH_ATTR statusLed2TimerStop( void )
 void ICACHE_FLASH_ATTR board_statusLed2( uint8_t mode )
 {
   #if LED2>0
-    os_printf("Statusled 2 set to %d\n\r", mode);
+    //os_printf("Statusled 2 set to %d\n\r", mode);
     switch (mode)
     {
       case 0:
@@ -872,6 +875,7 @@ void ICACHE_FLASH_ATTR board_statusLed2( uint8_t mode )
 
 /* PKA WB */
 
+#ifdef ENABLE_PKAWB
 uint32_t ICACHE_FLASH_ATTR board_wb_pin ( uint8_t setting, bool dir ) {
   if (dir) {
     switch (setting) {
@@ -924,7 +928,6 @@ static void ICACHE_FLASH_ATTR pkaWbTimerCb(void *arg)
 
 void ICACHE_FLASH_ATTR board_wbInit( void )
 {
-  os_printf("WB_INIT-------------------------------------\n\r");
   os_memset(&pkaWbTimer,0,sizeof(os_timer_t));
   os_timer_disarm(&pkaWbTimer);
   os_timer_setfn(&pkaWbTimer, (os_timer_func_t *)pkaWbTimerCb, NULL);
@@ -937,7 +940,7 @@ void ICACHE_FLASH_ATTR board_wbStop( void )
 {
   userSettings_t* settings = settings_get_pointer();
   if (settings->pka_wb>0) {
-    os_printf("WB_STOP\n\r");
+    //os_printf("WB_STOP\n\r");
     board_setOutput( board_wb_pin(settings->pka_wb, true), false );
     board_setOutput( board_wb_pin(settings->pka_wb, false), false ); //OFF
     os_timer_disarm(&pkaWbTimer); //Disable stop timer
@@ -949,7 +952,7 @@ void ICACHE_FLASH_ATTR board_wbUp( void )
 {
   userSettings_t* settings = settings_get_pointer();
   if (settings->pka_wb>0) {
-    os_printf("WB_UP\n\r");
+    //os_printf("WB_UP\n\r");
     board_setOutput( board_wb_pin(settings->pka_wb, true), true ); //UP
     board_setOutput( board_wb_pin(settings->pka_wb, false), true ); //ON
     uint32_t time = settings->pka_wb_time*1000;
@@ -963,7 +966,7 @@ void ICACHE_FLASH_ATTR board_wbDown( void )
 {
   userSettings_t* settings = settings_get_pointer();
   if (settings->pka_wb>0) {
-    os_printf("WB_DOWN\n\r");
+    //os_printf("WB_DOWN\n\r");
     board_setOutput( board_wb_pin(settings->pka_wb, true), false ); //DOWN
     board_setOutput( board_wb_pin(settings->pka_wb, false), true ); //ON
     uint32_t time = settings->pka_wb_time*1000;
@@ -982,3 +985,4 @@ bool ICACHE_FLASH_ATTR board_wbState( void )
 {
   return wbState;
 }
+#endif

@@ -5,9 +5,7 @@ HttpdBuiltInUrl builtInUrls[] = {
   {"/", cgiRedirect, "/home"},
   {"/*", authBasicRn, NULL},
   {"/home", cgiEspFsTemplate, tplHomepage},
-  {"/output", cgiSetOutput, NULL},
-  {"/pwmset", cgiSetPwm, NULL},
-  {"/WS2812set", cgiSetWS2812, NULL},
+
   {"/settings", cgiEspFsTemplate, tplSettings},
   {"/settings/store", cgiSettingsStore, NULL},
 
@@ -15,10 +13,21 @@ HttpdBuiltInUrl builtInUrls[] = {
   {"/wifi/store", cgiWifiSettingsStore, NULL},
   {"/wifi/scan", cgiWiFiScan, NULL},
   {"/wifi/status", cgiWiFiStatus, NULL},
-  {"/wb", cgiWb, NULL},
-  {"/sensor", cgiSensor, NULL},
-  {"/input", cgiGetInput, NULL},
+
+  {"/output", cgiSetOutput, NULL},
   {"/output/state", cgiGetOutput, NULL},
+  {"/input", cgiGetInput, NULL},
+
+  {"/sensor", cgiSensor, NULL},
+
+  {"/WS2812set", cgiSetWS2812, NULL},
+
+  #ifdef ENABLE_PKAWB
+  {"/wb", cgiWb, NULL},
+  #endif
+  #ifdef PWM_ENABLE
+  {"/pwmset", cgiSetPwm, NULL},
+  #endif
 
   //{"/flash/download", cgiReadFlash, NULL},
   //{"/flash/next", cgiGetFirmwareNext, &uploadParams},
@@ -172,15 +181,15 @@ char* ICACHE_FLASH_ATTR updateSensorStrings ( void )
   if (temperature!=-200)
   {
     uint8_t temperature_a = temperature/10;
-    uint8_t temperature_b = temperature - (temperature/10);
-    os_sprintf(temperatureString,"%d.%d\n\r", temperature_a, temperature_b );
+    uint8_t temperature_b = temperature - (temperature_a*10);
+    os_sprintf(temperatureString,"%d.%d", temperature_a, temperature_b );
   }
   int pressure = board_sensorGetAirPressure();
   if (pressure!=-200)
   {
     uint8_t pressure_a = pressure/1000;
-    uint8_t pressure_b = pressure - (pressure/1000);
-    os_sprintf(pressureString, "%d.%d\n\r", pressure_a, pressure_b );
+    uint8_t pressure_b = pressure - (pressure_a*1000);
+    os_sprintf(pressureString, "%d.%d", pressure_a, pressure_b );
   }
 }
 
@@ -206,11 +215,14 @@ void ICACHE_FLASH_ATTR setSwitchString(char* buff, uint8_t item)
   bool normalbutton = false;
   uint32_t pin = 0;
   userSettings_t* settings = settings_get_pointer();
+  #ifdef ENABLE_PKAWB
   if (settings->pka_wb==0) {
+  #endif
     if (item==1) pin = OUTPUT1;
     if (item==2) pin = OUTPUT2;
     if (item==3) pin = OUTPUT3;
     normalbutton = true;
+  #ifdef ENABLE_PKAWB
   } else {
     if (item==1) {
       if (board_wbMode()==2) {
@@ -260,6 +272,7 @@ void ICACHE_FLASH_ATTR setSwitchString(char* buff, uint8_t item)
       }
     }
   }
+  #endif
 
   if (normalbutton) {
     char text2[4] = "on";
@@ -288,7 +301,7 @@ int ICACHE_FLASH_ATTR tplHomepage(HttpdConnData *connData, char *token, void **a
     //updateSensorStrings(); //Called 2nd, update not needed
     os_sprintf(buff, "%s", pressureString);
   }
-  if (os_strcmp(token, "hour")==0) {
+  /*if (os_strcmp(token, "hour")==0) {
     updateSensorStrings();
     os_sprintf(buff, "--");
   }
@@ -299,7 +312,7 @@ int ICACHE_FLASH_ATTR tplHomepage(HttpdConnData *connData, char *token, void **a
   if (os_strcmp(token, "second")==0) {
     updateSensorStrings();
     os_sprintf(buff, "--");
-  }
+  } */
   if (os_strcmp(token, "label1")==0) {
     setLabelString(buff, 1);
   }
@@ -409,6 +422,7 @@ int ICACHE_FLASH_ATTR cgiSetOutput(HttpdConnData *connData) {
   }
 }
 
+#ifdef PWM_ENABLE
 int ICACHE_FLASH_ATTR cgiSetPwm(HttpdConnData *connData) {
   int len;
   char buff[1024];
@@ -462,6 +476,7 @@ int ICACHE_FLASH_ATTR cgiSetPwm(HttpdConnData *connData) {
     return HTTPD_CGI_DONE;
   }
 }
+#endif
 
 int ICACHE_FLASH_ATTR cgiSetWS2812(HttpdConnData *connData) {
   int len;
@@ -533,10 +548,12 @@ int ICACHE_FLASH_ATTR tplSettings(HttpdConnData *connData, char *token, void **a
       os_sprintf(buff, "");
     }
   }
-  
   userSettings_t* settings = settings_get_pointer();
-  if ((os_strcmp(token, "name")==0)||(os_strcmp(token, "hostname")==0)) {
-    os_memcpy( buff, settings->name, 32 );
+  if (os_strcmp(token, "name")==0) {
+    os_memcpy( buff, settings->name, 64 );
+  }
+  if (os_strcmp(token, "hostname")==0) {
+    os_memcpy( buff, settings->hostname, 32 );
   }
   if (os_strcmp(token, "enable_mdns")==0) {
     if (settings->enable_mdns) {
@@ -562,7 +579,15 @@ int ICACHE_FLASH_ATTR tplSettings(HttpdConnData *connData, char *token, void **a
     }
   }
   if (os_strcmp(token, "bootstate")==0) os_sprintf( buff, "%d", settings->bootstate );
-  if (os_strcmp(token, "device_password")==0) os_memcpy( buff, settings->device_password, 64 );
+  if (os_strcmp(token, "authEnable")==0) {
+    if (settings->authEnable) {
+      os_sprintf(buff, " checked");
+    } else {
+      os_sprintf(buff, "");
+    }
+  }
+  if (os_strcmp(token, "authUser")==0) os_memcpy( buff, settings->authUser, 64 );
+  if (os_strcmp(token, "authPassword")==0) os_memcpy( buff, settings->authPassword, 64 );
   if (os_strcmp(token, "ledstrip_type")==0) os_sprintf( buff, "%d", settings->ledstrip_type );
   if (os_strcmp(token, "ledstrip_length")==0) os_sprintf( buff, "%d", settings->ledstrip_length );
   if (os_strcmp(token, "bootstate_R")==0) os_sprintf( buff, "%d", settings->bootstate_R );
@@ -570,6 +595,12 @@ int ICACHE_FLASH_ATTR tplSettings(HttpdConnData *connData, char *token, void **a
   if (os_strcmp(token, "bootstate_B")==0) os_sprintf( buff, "%d", settings->bootstate_B );
   if (os_strcmp(token, "pka_wb")==0) os_sprintf( buff, "%d", settings->pka_wb );
   if (os_strcmp(token, "pka_wb_time")==0) os_sprintf( buff, "%d", settings->pka_wb_time );
+  int i = 0;
+  char t[12];
+  for (i = 0; i<16; i++) {
+    os_sprintf(t, "actSensor%d", i);
+    if (os_strcmp(token, t)==0) os_sprintf( buff, "%d", settings->actSensor[i] ); 
+  }
   httpdSend(connData, buff, -1);
   return HTTPD_CGI_DONE;
 }
@@ -606,6 +637,14 @@ int ICACHE_FLASH_ATTR tplWifiSettings(HttpdConnData *connData, char *token, void
     if (os_strcmp(token, "static_netmask_2")==0) os_sprintf(buff, "%d", settings->static_netmask_2);
     if (os_strcmp(token, "static_netmask_3")==0) os_sprintf(buff, "%d", settings->static_netmask_3);
     if (os_strcmp(token, "static_netmask_4")==0) os_sprintf(buff, "%d", settings->static_netmask_4);
+    if (os_strcmp(token, "static_dns_1")==0) os_sprintf(buff, "%d", settings->static_dns_1);
+    if (os_strcmp(token, "static_dns_2")==0) os_sprintf(buff, "%d", settings->static_dns_2);
+    if (os_strcmp(token, "static_dns_3")==0) os_sprintf(buff, "%d", settings->static_dns_3);
+    if (os_strcmp(token, "static_dns_4")==0) os_sprintf(buff, "%d", settings->static_dns_4);
+    if (os_strcmp(token, "static_altdns_1")==0) os_sprintf(buff, "%d", settings->static_altdns_1);
+    if (os_strcmp(token, "static_altdns_2")==0) os_sprintf(buff, "%d", settings->static_altdns_2);
+    if (os_strcmp(token, "static_altdns_3")==0) os_sprintf(buff, "%d", settings->static_altdns_3);
+    if (os_strcmp(token, "static_altdns_4")==0) os_sprintf(buff, "%d", settings->static_altdns_4);
   } else {
     strcpy(buff, "NOT IN SETUP MODE");
   }
@@ -621,13 +660,16 @@ int ICACHE_FLASH_ATTR cgiSettingsStore(HttpdConnData *connData)
   if (connData->conn==NULL) return HTTPD_CGI_DONE;
   len=httpdFindArg(connData->post->buff, "name", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "name", buff, sizeof(buff));
-  if (len>0) os_memcpy(settings->name, buff, 32);
+  if (len>0) os_memcpy(settings->name, buff, 64);
+  len=httpdFindArg(connData->post->buff, "hostname", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "hostname", buff, sizeof(buff));
+  if (len>0) os_memcpy(settings->hostname, buff, 32);
   len=httpdFindArg(connData->post->buff, "enable_mdns", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "enable_mdns", buff, sizeof(buff));
-  if (len>0) settings->enable_mdns = atoi(buff);
+  if (len>0) { settings->enable_mdns = atoi(buff); } else { settings->enable_mdns = false; }
   len=httpdFindArg(connData->post->buff, "enable_ntp", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "enable_ntp", buff, sizeof(buff));
-  if (len>0) settings->enable_ntp = atoi(buff);
+  if (len>0) { settings->enable_ntp = atoi(buff); } else { settings->enable_ntp = false; }
   len=httpdFindArg(connData->post->buff, "ntp_server", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "ntp_server", buff, sizeof(buff));
   if (len>0) os_memcpy(settings->ntpserver, buff, 64);
@@ -636,10 +678,16 @@ int ICACHE_FLASH_ATTR cgiSettingsStore(HttpdConnData *connData)
   if (len>0) settings->timezone = atoi(buff);
   len=httpdFindArg(connData->post->buff, "enable_summertime", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "enable_summertime", buff, sizeof(buff));
-  if (len>0) settings->enable_summertime = atoi(buff);
-  len=httpdFindArg(connData->post->buff, "device_password", buff, sizeof(buff));
-  if (len<=0) len=httpdFindArg(connData->getArgs, "device_password", buff, sizeof(buff));
-  if (len>0) os_memcpy(settings->device_password, buff, 64);
+  if (len>0) { settings->enable_summertime = atoi(buff); } else { settings->enable_summertime = false; }
+  len=httpdFindArg(connData->post->buff, "authEnable", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "authEnable", buff, sizeof(buff));
+  if (len>0) { settings->authEnable = atoi(buff); } else { settings->authEnable = false; }
+  len=httpdFindArg(connData->post->buff, "authUser", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "authUser", buff, sizeof(buff));
+  if (len>0) os_memcpy(settings->authUser, buff, 64);
+  len=httpdFindArg(connData->post->buff, "authPassword", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "authPassword", buff, sizeof(buff));
+  if (len>0) os_memcpy(settings->authPassword, buff, 64);
   len=httpdFindArg(connData->post->buff, "bootstate", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "bootstate", buff, sizeof(buff));
   if (len>0) settings->bootstate = atoi(buff);
@@ -664,6 +712,15 @@ int ICACHE_FLASH_ATTR cgiSettingsStore(HttpdConnData *connData)
   len=httpdFindArg(connData->post->buff, "pka_wb_time", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "pka_wb_time", buff, sizeof(buff));
   if (len>0) settings->pka_wb_time = atoi(buff); 
+  //Sensoractions
+  int i = 0;
+  char t[12];
+  for (i = 0; i<16; i++) {
+    os_sprintf(t, "actSensor%d", i);
+    len=httpdFindArg(connData->post->buff, t, buff, sizeof(buff));
+    if (len<=0) len=httpdFindArg(connData->getArgs, t, buff, sizeof(buff));
+    if (len>0) settings->actSensor[i] = atoi(buff);
+  }
   settings_store( settings );
   httpdRedirect(connData, "/settingsstored");
   settings_apply( settings, false );
@@ -684,7 +741,7 @@ int ICACHE_FLASH_ATTR cgiWifiSettingsStore(HttpdConnData *connData)
   if (len>0) os_memcpy(settings->password, buff, 64);
   len=httpdFindArg(connData->post->buff, "enable_dhcp", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "enable_dhcp", buff, sizeof(buff));
-  if (len>0) settings->enable_dhcp = atoi(buff);
+  if (len>0) { settings->enable_dhcp = atoi(buff); } else { settings->enable_dhcp = false; }
   len=httpdFindArg(connData->post->buff, "static_ip_1", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "static_ip_1", buff, sizeof(buff));
   if (len>0) settings->static_ip_1 = atoi(buff);
@@ -721,6 +778,30 @@ int ICACHE_FLASH_ATTR cgiWifiSettingsStore(HttpdConnData *connData)
   len=httpdFindArg(connData->post->buff, "static_netmask_4", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "static_netmask_4", buff, sizeof(buff));
   if (len>0) settings->static_netmask_4 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_dns_1", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_dns_1", buff, sizeof(buff));
+  if (len>0) settings->static_dns_1 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_dns_2", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_dns_2", buff, sizeof(buff));
+  if (len>0) settings->static_dns_2 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_dns_3", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_dns_3", buff, sizeof(buff));
+  if (len>0) settings->static_dns_3 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_dns_4", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_dns_4", buff, sizeof(buff));
+  if (len>0) settings->static_dns_4 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_altdns_1", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_altdns_1", buff, sizeof(buff));
+  if (len>0) settings->static_altdns_1 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_altdns_2", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_altdns_2", buff, sizeof(buff));
+  if (len>0) settings->static_altdns_2 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_altdns_3", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_altdns_3", buff, sizeof(buff));
+  if (len>0) settings->static_altdns_3 = atoi(buff);
+  len=httpdFindArg(connData->post->buff, "static_altdns_4", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "static_altdns_4", buff, sizeof(buff));
+  if (len>0) settings->static_altdns_4 = atoi(buff);
   len=httpdFindArg(connData->post->buff, "force", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "force", buff, sizeof(buff));
   if (len>0) {
@@ -786,6 +867,7 @@ int ICACHE_FLASH_ATTR cgiWiFiStatus(HttpdConnData *connData)
   return HTTPD_CGI_DONE;
 }
 
+#ifdef ENABLE_PKAWB
 int ICACHE_FLASH_ATTR cgiWb(HttpdConnData *connData)
 {
   int len;
@@ -825,6 +907,7 @@ int ICACHE_FLASH_ATTR cgiWb(HttpdConnData *connData)
   }
   return HTTPD_CGI_DONE;
 }
+#endif
 
 int ICACHE_FLASH_ATTR cgiSensor(HttpdConnData *connData)
 {
@@ -832,8 +915,8 @@ int ICACHE_FLASH_ATTR cgiSensor(HttpdConnData *connData)
   bool result = false;
   char buff[1024];
   if (connData->conn==NULL) return HTTPD_CGI_DONE;
-  len=httpdFindArg(connData->post->buff, "t", buff, sizeof(buff));
-      
+
+  len=httpdFindArg(connData->post->buff, "temperature", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "temperature", buff, sizeof(buff));
   if (len>0) {
     updateSensorStrings();
@@ -841,6 +924,7 @@ int ICACHE_FLASH_ATTR cgiSensor(HttpdConnData *connData)
     httpdSend(connData, buff, strlen(buff));
   }
   
+  len=httpdFindArg(connData->post->buff, "pressure", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "pressure", buff, sizeof(buff));
   if (len>0) {
     updateSensorStrings();

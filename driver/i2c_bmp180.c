@@ -19,20 +19,20 @@ int16_t ICACHE_FLASH_ATTR BMP180_readRegister16(uint8_t reg)
   i2c_master_start();
   i2c_master_writeByte(BMP180_ADDRESS);
   if(!i2c_master_checkAck()){
-    os_printf("slave not ack..\n return \n");
+    //os_printf("slave not ack..\n return \n");
     i2c_master_stop();
     return(0);
   }
   i2c_master_writeByte(reg);
   if(!i2c_master_checkAck()){
-    os_printf("slave not ack..\n return \n");
+    //os_printf("slave not ack..\n return \n");
     i2c_master_stop();
     return(0);
   }
   i2c_master_start();
   i2c_master_writeByte(BMP180_ADDRESS+1);
   if(!i2c_master_checkAck()){
-    os_printf("slave not ack..\n return \n");
+    //os_printf("slave not ack..\n return \n");
     i2c_master_stop();
     return(0);
   }
@@ -43,7 +43,7 @@ int16_t ICACHE_FLASH_ATTR BMP180_readRegister16(uint8_t reg)
   i2c_master_stop();
   int16_t res = msb << 8;
   res += lsb;
-  if (reg==BMP180_VERSION_REG) os_printf("BMP180_VERSION_REG: %d\n\r", res);
+  //if (reg==BMP180_VERSION_REG) os_printf("BMP180_VERSION_REG: %d\n\r", res);
   return res;
 }
 
@@ -52,19 +52,19 @@ int16_t ICACHE_FLASH_ATTR BMP180_readRawValue(uint8_t cmd)
   i2c_master_start();
   i2c_master_writeByte(BMP180_ADDRESS);
   if(!i2c_master_checkAck()){
-    os_printf("slave not ack..\n return \n");
+    //os_printf("slave not ack..\n return \n");
     i2c_master_stop();
     return(0);
   }
   i2c_master_writeByte(BMP180_CTRL_REG);
   if(!i2c_master_checkAck()){
-    os_printf("slave not ack..\n return \n");
+    //os_printf("slave not ack..\n return \n");
     i2c_master_stop();
     return(0);
   }
   i2c_master_writeByte(cmd);
   if(!i2c_master_checkAck()){
-    os_printf("slave not ack..\n return \n");
+    //os_printf("slave not ack..\n return \n");
     i2c_master_stop();
     return(0);
   }

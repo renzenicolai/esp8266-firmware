@@ -656,7 +656,7 @@ mdns_send_service(struct mdns_info *info, u8_t id) {
 		ans.ttl = htonl(300);
 //		length = os_strlen(TXT_DATA) + MDNS_LENGTH_ADD + 1;
 		device_info = (char *)os_zalloc(50);
-		ets_sprintf(device_info,"vendor = %s","Espressif");
+		ets_sprintf(device_info,"vendor = %s","RNPLUS");
 		for(i = 0; i < 10 &&(info->txt_data[i] != NULL);i++) {
 			length += os_strlen(info->txt_data[i]);
 			length++;
@@ -941,14 +941,14 @@ mdns_get_hostname(void) {
 	if (host_name[0] != 0 ) {
 	return name;
 	} else {
-		return ("Espressif");
+		return ("rnplus");
 	}
 }
 
 void ICACHE_FLASH_ATTR
 mdns_set_hostname(char *name) {
 	if (name == NULL) {
-		os_strncpy(host_name, "Espressif", os_strlen("Espressif")+3);
+		os_strncpy(host_name, "RNPLUS", os_strlen("RNPLUS")+3);
 		return;
 	}
 	if (os_strlen(name) + 3 <= MDNS_NAME_LENGTH ){
@@ -962,7 +962,7 @@ mdns_set_hostname(char *name) {
 void ICACHE_FLASH_ATTR
 mdns_set_servername(const char *name) {
 	if (name == NULL) {
-		PUCK_SERVICE = "_Espressif._tcp._local";
+		PUCK_SERVICE = "_rnplus._tcp._local";
 	}else {
 		os_sprintf(server_name ,"_%s._tcp.local",name);
 		PUCK_SERVICE = server_name;
@@ -973,7 +973,7 @@ char* ICACHE_FLASH_ATTR
 mdns_get_servername(void) {
 	char *name = PUCK_SERVICE;
 	if (name == NULL) {
-		PUCK_SERVICE = "_Espressif._tcp._local";
+		PUCK_SERVICE = "_rnplus._tcp._local";
 	}
 	return name;
 }

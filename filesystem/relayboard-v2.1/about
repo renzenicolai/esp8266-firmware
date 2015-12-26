@@ -28,7 +28,7 @@
 </div>
 
 <div class='home'>
-FirmwaRe 1.0<br />
+FirmwaRe 1.1<br />
 &copy;&nbsp;Renze Nicolai 2015
 <hr />
 API:<br />
@@ -41,7 +41,7 @@ API:<br />
 <tr><td>/output?pin=<i>pinid</i>&state=1</td><td>Output on</td></tr>
 <tr><td>/output?pin=<i>pinid</i>&state=0</td><td>Output off</td></tr>
 <tr><td>/output/state?pin=<i>pinid</i></td><td>Get state of output</td></tr>
-<tr><td>/input?pin=<i>id</i></td><td>Get state of input (id: 0 to 3)</td></tr>
+<tr><td>/input?pin=<i>id</i></td><td>Get state of input (id: 1 to 4)</td></tr>
 </table>
 <hr />
 Valid <i>pinid</i> values for this device:
@@ -50,6 +50,15 @@ Valid <i>pinid</i> values for this device:
 <tr><td>90</td><td>Output 1</td></tr>
 <tr><td>91</td><td>Output 2</td></tr>
 <tr><td>92</td><td>Output 3</td></tr>
+</table>
+<hr />
+Valid input <i>id</i> values for this device:
+<table>
+<tr><td>id</td><td>&nbsp;</td></tr>
+<tr><td>1</td><td>Sensor 1</td></tr>
+<tr><td>2</td><td>Sensor 2</td></tr>
+<tr><td>3</td><td>Sensor 3</td></tr>
+<tr><td>4</td><td>Sensor 4</td></tr>
 </table>
 </div>
 </body>

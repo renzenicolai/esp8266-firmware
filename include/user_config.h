@@ -25,6 +25,7 @@
   
   /* Build configuration */
   #define DEVICE_TYPE DEVICE_RELAY_BOARD_2 //Build for relayboard v2
+  //#define DEVICE_TYPE DEVICE_LAMP_RGB
   #define FIRMWARE_VERSION 2
   #define SETTINGS_SECTOR 0xFC
   #define WIFI_SETTINGS_SECTOR 0xFD
@@ -64,6 +65,9 @@
     #define I2C_MCP 1
     #define I2C_BMP180
     #define I2C_MCP_INT 12
+    #define ENABLE_DIGITAL_SENSORS
+    #define ENABLE_PKAWB
+    #define UART_MENU
     
   #elif DEVICE_TYPE==DEVICE_ESPLIGHT
     #define DEVICE_TYPE_NAME "ESPLight 1.0"
@@ -79,7 +83,7 @@
     #define OUTPUT3 2 //PWM BLUE
     #define OUTPUT4 13 //DIGITAL DATA
     #define PWM_ENABLE //Enables PWM on output 1,2 and 3
-    #define WS2812 13
+    //#define WS2812 13
     
   #elif DEVICE_TYPE==DEVICE_QUAKESENSE
     #define DEVICE_TYPE_NAME "RN+ Earthquake sensor PR.1"

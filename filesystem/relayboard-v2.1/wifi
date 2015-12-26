@@ -152,6 +152,26 @@
     <div class='right ipdot'>.</div>
     <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_1" value="%static_gateway_1%" size="3"></div>
   </div>
+  <div class='row'>
+    <div class='left'>Manual DNS server (1)</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_4" value="%static_dns_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_3" value="%static_dns_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_2" value="%static_dns_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_1" value="%static_dns_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual DNS server (2)</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_4" value="%static_altdns_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_3" value="%static_altdns_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_2" value="%static_altdns_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_1" value="%static_altdns_1%" size="3"></div>
+  </div>
   <div class='row'>&nbsp;</div>
   <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Connect</button></div></div>
 </div>
