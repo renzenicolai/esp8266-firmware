@@ -1,0 +1,335 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>RN+ WiFi switch</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="140medley.min.js"></script>
+  <script type="text/javascript">
+    
+  window.onload=function(e) {
+    timezoneset();
+    bootstateset();
+    pkawbset();
+    sensorset();
+  };
+    
+  function timezoneset() {
+    var items = document.getElementsByClassName('tz_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%timezone%') items[i].selected = true;
+    }
+  }
+
+  function sensorset() {
+    var items = document.getElementsByClassName('s1_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor1%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s2_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor2%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s3_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor3%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s4_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor4%') items[i].selected = true;
+    }
+  }
+  
+  function bootstateset() {
+    var items = document.getElementsByClassName('bs_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%bootstate%') items[i].selected = true;
+    }
+  }
+
+  function pkawbset() {
+    var items = document.getElementsByClassName('wb_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%pka_wb%') items[i].selected = true;
+    }
+  }
+
+  function removeOptions(selectbox)
+  {
+      var i;
+      for(i=selectbox.options.length-1;i>=0;i--)
+      {
+          selectbox.remove(i);
+      }
+  }
+  </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<div id='notsetupwarning' class='home warning %hidewarning%'>
+<div class='row'>
+  <div class='left bold'>Welcome!</div>
+  <div class='right'>&nbsp;</div>
+</div>
+<div class='row'>
+  <div class='left'>Please configure the wifi settings in the wifi setup.</div>
+  <div class='right'><a class='button' href='/wifi'>Go to setup</a></div>
+</div>
+</div>
+
+<form name="settings" action='/settings/store' method='post'>
+<div class='home wide'>
+  <h2>Device</h2>
+  <div class='row'><div class='left'>Device name</div><div class='right'><input type='text' name='name' value='%name%'></div></div>
+  <hr />
+  <h2>Network</h2>
+  <div class='row'><div class='left'>Hostname&nbsp;<i>[A-Z,a-z,0-9 only. No space]</i></div><div class='right'><input type='text' name='hostname' value='%hostname%'></div></div>
+  <div class='row'><div class='left'>Enable MDNS / bonjour service discovery</div><div class='right'><input type='checkbox' name='enable_mdns' value='1'%enable_mdns%></div></div>
+  <hr />
+  <h2>Hardware</h2>
+  <div class='row'><div class='left'>State of outputs after power-loss</div>
+    <div class='right'>
+      <select name="bootstate">
+        <option value="0" class="bs_option">All outputs off</option>
+        <option value="1" class="bs_option">Output 1 on</option>
+        <option value="2" class="bs_option">Output 2 on</option>
+        <option value="4" class="bs_option">Output 3 on</option>
+        <option value="3" class="bs_option">Output 1 and 2 on</option>
+        <option value="5" class="bs_option">Output 1 and 3 on</option>
+        <option value="6" class="bs_option">Output 2 and 3 on</option>
+        <option value="7" class="bs_option">All outputs on</option>
+      </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>Window blinds control</div>
+    <div class='right'>
+      <select name="pka_wb">
+        <option value="0" class="wb_option">Disabled</option>
+        <option value="1" class="wb_option">Up/Down on output 1, direction on output 2</option>
+        <option value="2" class="wb_option">Up/Down on output 1, direction on output 3</option>
+        <option value="3" class="wb_option">Up/Down on output 2, direction on output 1</option>
+        <option value="4" class="wb_option">Up/Down on output 2, direction on output 3</option>
+        <option value="5" class="wb_option">Up/Down on output 3, direction on output 1</option>
+        <option value="6" class="wb_option">Up/Down on output 3, direction on output 2</option>
+      </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>&nbsp;&nbsp;&nbsp;&nbsp;<i>Moving time for window blinds</i></div>
+    <div class='right'>
+      <h3>&nbsp;Seconds</h3>
+    </div>
+    <div class='right'>
+      <input type='text' name='pka_wb_time' value='%pka_wb_time%' size='3' />
+    </div>
+  </div>
+  <div class='row'><div class='left'>Sensor 1 action</div>
+    <div class='right'>
+    <select name="actSensor1" style="width: 200px;">
+      <option value="0" class="s1_option">Do nothing</option>
+      <option value="1" class="s1_option">Output 1 on</option>
+      <option value="2" class="s1_option">Output 2 on</option>
+      <option value="3" class="s1_option">Output 3 on</option>
+      <option value="4" class="s1_option">Output 1 off</option>
+      <option value="5" class="s1_option">Output 2 off</option>
+      <option value="6" class="s1_option">Output 3 off</option>
+      <option value="7" class="s1_option">Output 1 toggle</option>
+      <option value="8" class="s1_option">Output 2 toggle</option>
+      <option value="9" class="s1_option">Output 3 toggle</option>
+      <option value="10" class="s1_option">Windowblinds up</option>
+      <option value="11" class="s1_option">Windowblinds down</option>
+      <option value="12" class="s1_option">Windowblinds stop</option>
+      <option value="13" class="s1_option">Windowblinds toggle</option>
+      <option value="14" class="s4_option">Send event using HTTP</option>
+    </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>&nbsp;&nbsp;&nbsp;&nbsp;<i>Minimal time between triggers</i></div>
+    <div class='right'>
+      <h3>&nbsp;ms</h3>
+    </div>
+    <div class='right'>
+      <input type='text' name='sensor1_time' value='%sensor1_time%' size='3' />
+    </div>
+  </div>
+  <div class='row'><div class='left'>Sensor 2 action</div>
+    <div class='right'>
+    <select name="actSensor2" style="width: 200px;">
+      <option value="0" class="s2_option">Do nothing</option>
+      <option value="1" class="s2_option">Output 1 on</option>
+      <option value="2" class="s2_option">Output 2 on</option>
+      <option value="3" class="s2_option">Output 3 on</option>
+      <option value="4" class="s2_option">Output 1 off</option>
+      <option value="5" class="s2_option">Output 2 off</option>
+      <option value="6" class="s2_option">Output 3 off</option>
+      <option value="7" class="s2_option">Output 1 toggle</option>
+      <option value="8" class="s2_option">Output 2 toggle</option>
+      <option value="9" class="s2_option">Output 3 toggle</option>
+      <option value="10" class="s2_option">Windowblinds up</option>
+      <option value="11" class="s2_option">Windowblinds down</option>
+      <option value="12" class="s2_option">Windowblinds stop</option>
+      <option value="13" class="s2_option">Windowblinds toggle</option>
+      <option value="14" class="s4_option">Send event using HTTP</option>
+    </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>&nbsp;&nbsp;&nbsp;&nbsp;<i>Minimal time between triggers</i></div>
+    <div class='right'>
+      <h3>&nbsp;ms</h3>
+    </div>
+    <div class='right'>
+      <input type='text' name='sensor2_time' value='%sensor2_time%' size='3' />
+    </div>
+  </div>
+  <div class='row'><div class='left'>Sensor 3 action</div>
+    <div class='right'>
+    <select name="actSensor3" style="width: 200px;">
+      <option value="0" class="s3_option">Do nothing</option>
+      <option value="1" class="s3_option">Output 1 on</option>
+      <option value="2" class="s3_option">Output 2 on</option>
+      <option value="3" class="s3_option">Output 3 on</option>
+      <option value="4" class="s3_option">Output 1 off</option>
+      <option value="5" class="s3_option">Output 2 off</option>
+      <option value="6" class="s3_option">Output 3 off</option>
+      <option value="7" class="s3_option">Output 1 toggle</option>
+      <option value="8" class="s3_option">Output 2 toggle</option>
+      <option value="9" class="s3_option">Output 3 toggle</option>
+      <option value="10" class="s3_option">Windowblinds up</option>
+      <option value="11" class="s3_option">Windowblinds down</option>
+      <option value="12" class="s3_option">Windowblinds stop</option>
+      <option value="13" class="s3_option">Windowblinds toggle</option>
+      <option value="14" class="s4_option">Send event using HTTP</option>
+    </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>&nbsp;&nbsp;&nbsp;&nbsp;<i>Minimal time between triggers</i></div>
+    <div class='right'>
+      <h3>&nbsp;ms</h3>
+    </div>
+    <div class='right'>
+      <input type='text' name='sensor3_time' value='%sensor3_time%' size='3' />
+    </div>
+  </div>
+  <div class='row'><div class='left'>Sensor 4 action</div>
+    <div class='right'>
+    <select name="actSensor4" style="width: 200px;">
+      <option value="0" class="s4_option">Do nothing</option>
+      <option value="1" class="s4_option">Output 1 on</option>
+      <option value="2" class="s4_option">Output 2 on</option>
+      <option value="3" class="s4_option">Output 3 on</option>
+      <option value="4" class="s4_option">Output 1 off</option>
+      <option value="5" class="s4_option">Output 2 off</option>
+      <option value="6" class="s4_option">Output 3 off</option>
+      <option value="7" class="s4_option">Output 1 toggle</option>
+      <option value="8" class="s4_option">Output 2 toggle</option>
+      <option value="9" class="s4_option">Output 3 toggle</option>
+      <option value="10" class="s4_option">Windowblinds up</option>
+      <option value="11" class="s4_option">Windowblinds down</option>
+      <option value="12" class="s4_option">Windowblinds stop</option>
+      <option value="13" class="s4_option">Windowblinds toggle</option>
+      <option value="14" class="s4_option">Send event using HTTP</option>
+    </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>&nbsp;&nbsp;&nbsp;&nbsp;<i>Minimal time between triggers</i></div>
+    <div class='right'>
+      <h3>&nbsp;ms</h3>
+    </div>
+    <div class='right'>
+      <input type='text' name='sensor4_time' value='%sensor4_time%' size='3' />
+    </div>
+  </div>
+  <!--<div class='row'><div class='left'>HTTP data push api path</div>
+    <div class='right'>
+      <input type='text' name='sensor_url' value='%sensor_url%' />
+    </div>
+  </div>-->
+  <div class='row'><div class='left'>Sensor 1 HTTP request url</div>
+    <div class='right'>
+      <input type='text' name='sensor1_url' value='%sensor1_url%' />
+    </div>
+  </div>
+  <div class='row'><div class='left'>Sensor 2 HTTP request url</div>
+    <div class='right'>
+      <input type='text' name='sensor2_url' value='%sensor2_url%' />
+    </div>
+  </div>
+  <div class='row'><div class='left'>Sensor 3 HTTP request url</div>
+    <div class='right'>
+      <input type='text' name='sensor3_url' value='%sensor3_url%' />
+    </div>
+  </div>
+  <div class='row'><div class='left'>Sensor 4 HTTP request url</div>
+    <div class='right'>
+      <input type='text' name='sensor4_url' value='%sensor4_url%' />
+    </div>
+  </div>
+  <hr />
+  <h2>Security</h2>
+  <i>When set the device will ask for this username and password via http-basic-auth before allowing access to the webinterface.</i>
+  <div class='row'><div class='left'>Enable authentication</div>
+    <div class='right'><input type='checkbox' name='authEnable' value='1'%authEnable%></div>
+  </div>
+  <div class='row'><div class='left'>Username</div><div class='right'><input type='text' name='authUser' value='%authUser%'></div></div>
+  <div class='row'><div class='left'>Password</div><div class='right'><input type='text' name='authPassword' value='%authPassword%'></div></div>
+  <hr />
+  <!--<h2>Clock</h2>
+  <div class='row'><div class='left'>Enable NTP </div><div class='right'><input type='checkbox' name='enable_ntp' value='1'%enable_ntp%></div></div>
+  <div class='row'><div class='left'>NTP server</div><div class='right'><input type='text' name='ntpserver' value='%ntp_server%'></div></div>
+  <div class='row'><div class='left'>Timezone</div>
+    <div class='right'>
+    <select name="timezone" style="width: 100px;">
+      <option value="0" class="tz_option">GMT -12</option>
+      <option value="1" class="tz_option">GMT -11</option>
+      <option value="2" class="tz_option">GMT -10</option>
+      <option value="3" class="tz_option">GMT -09</option>
+      <option value="4" class="tz_option">GMT -08</option>
+      <option value="5" class="tz_option">GMT -07</option>
+      <option value="6" class="tz_option">GMT -06</option>
+      <option value="7" class="tz_option">GMT -05</option>
+      <option value="8" class="tz_option">GMT -04</option>
+      <option value="9" class="tz_option">GMT -03</option>
+      <option value="10" class="tz_option">GMT -02</option>
+      <option value="11" class="tz_option">GMT -01</option>
+      <option value="12" class="tz_option">GMT</option>
+      <option value="13" class="tz_option">GMT +01</option>
+      <option value="14" class="tz_option">GMT +02</option>
+      <option value="15" class="tz_option">GMT +03</option>
+      <option value="16" class="tz_option">GMT +04</option>
+      <option value="17" class="tz_option">GMT +05</option>
+      <option value="18" class="tz_option">GMT +06</option>
+      <option value="19" class="tz_option">GMT +07</option>
+      <option value="20" class="tz_option">GMT +08</option>
+      <option value="21" class="tz_option">GMT +09</option>
+      <option value="22" class="tz_option">GMT +10</option>
+      <option value="23" class="tz_option">GMT +11</option>
+      <option value="24" class="tz_option">GMT +12</option>
+      <option value="25" class="tz_option">GMT +13</option>
+      <option value="26" class="tz_option">GMT +14</option>
+    </select>
+    </div>
+  </div>
+  <div class='row'><div class='left'>Enable summertime correction</div>
+    <div class='right'><input type='checkbox' name='enable_summertime' value='1'%ntp_summer%></div>
+  </div>
+  <hr />-->
+  <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Save configuration</button></div></div>
+</div>
+</form>
+<br /><br />
+</body>
+</html>

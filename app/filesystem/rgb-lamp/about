@@ -1,0 +1,35 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>RN+ WiFi switch</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <script type=\"text/javascript\">
+    function setSsid() {
+      var netsel = document.getElementById(\"netsel\"); document.getElementById(\"ssid\").value=netsel.options[netsel.selectedIndex].value;
+    }
+  </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<div class='home'>
+FirmwaRe 1.0<br />
+&copy;&nbsp;Renze Nicolai 2015
+</div>
+</body>
+</html>

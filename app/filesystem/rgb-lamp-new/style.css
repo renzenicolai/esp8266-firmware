@@ -1,0 +1,160 @@
+body {margin: 0px; padding: 0px; font-family: "Open Sans", sans-serif; font-color: #000; font-size: 14px; background-color: #FFFFFF;}
+hr { color: #000; background-color: #000; height: 1px; border: none; width: 100%;}
+
+.header { left: 0px; right: 0px; top: 0px; background-color: #222222; color: #FFF; margin: 0px; padding: 0px; padding-bottom: 0px; height: 55px; border-bottom: 3px solid #00AEEF;}
+.header h1 {padding: 0px; margin: 0px; padding-top: 5px;}
+.header h1 a {color: #FFFFFF; text-decoration: none;}
+.header .float_left {float: left; padding-top: 5px;padding-left: 10px;}
+.header .float_left h1 {margin: 0px; float: left; padding: 0px; padding-left: 5px; padding-right: 10px; font-size: 35px; font-weight: bold;}
+.header .float_left h1 .logo1 {color: #00AEEF;}
+.header .float_left h2 {margin: 0px; float: left; padding: 0px; padding-left: 5px; padding-right: 10px; font-size: 20px; padding-top: 10px;}
+.header .float_left form {float: left; margin-top: 3px;}
+.header .float_right {float: right; margin: 0px; margin-right: 20px; padding: 0px; height: 100%;}
+.header .float_right a {display: inline-block; color: #FFF; text-decoration: none; padding-bottom: 0px; padding-top: 20px; padding-left: 10px; 
+padding-right: 10px; margin: 0px; height: 35px; border-bottom: 3px solid #00AEEF;}
+.header .float_right a:hover {background-color: #363636; border-bottom: 3px solid #FF8500;}
+
+.mobile_menu {width: 100%; margin: 0px; padding: 0px; font-size: 25px; text-align: center; margin-bottom: 3px; }
+.mobile_menu a {display: inline-block; width: 100%; color: #FFFFFF; height: 40px; background-color: #363636; text-decoration: none; }
+.mobile_menu a:hover {background-color: #00AEEF;}
+
+.home table { border-collapse: true; border-width: 0px; }
+.home td { border-collapse: true; border-width: 1px; border-style: solid; border-color: #CCCCCC;}
+.row {left: 0px; right: 0px; min-height: 40px; font-size: 15px; margin: 0px; padding-top: 6px; padding-bottom: 10px; padding-left: 10px; padding-right: 10px; }
+.row .left { float: left; padding-top: 7px; }
+.row .right { float: right; min-height: 30px; }
+.row .bulb { float: right; height: 40px; padding: 0px; margin-top: -6px; margin-bottom: -10px; }
+.ipdot { font-size: 30px; color: #CCCCCC; }
+.center { float: center; width: 100%; text-align: center; }
+.center table { text-align: left; width: 150px; margin-left: 75px; }
+
+.home{ border-color:#DDDDDD; border-width: 1px; border-style: solid; background-color: #F2F2F2; border-radius: 4px; margin-bottom: 40px; margin-top: 0px; padding: 0px; }
+
+.warning { background-color: #D9534F; border-color: #DDDDDD; color: #FFFFFF; }
+.bold { font-weight: bold; }
+.actionbar { background-color: #FFFFFF; border-top-color: #DDDDDD; border-top-style: solid; border-top-width: 2px; }
+.warning .button {
+  border: 1px solid #DDDDDD;
+  border-bottom-width: 3px;
+  background-color: #FFFFFF;
+  color: #000000;
+}
+.warning .button:hover {
+  border: 1px solid #DDDDDD;
+  border-bottom-width: 3px;
+  background-color: #DDDDDD;
+}
+
+@media (min-width: 800px) { .home{ width: 800px; margin-left: auto; margin-right: auto; padding: 0px;} .msg{ width: 200px; } .wide{ width: 800px;}}
+@media (max-width: 799px) {.home{ border-radius: 0px; left: 3px; right: 3px; margin-left: 0px; margin-right: 0px; padding: 0px;} .msg{ left: 3px; right: 3px; }} 
+@media (max-width: 699px) {div.header .float_right { display: none; }}
+@media (min-width: 700px) {.mobile_menu {display: none; } .header{margin-bottom: 50px;} }
+.wifi_icon { background-image: url("icons.png"); background-color: transparent; width: 32px; height: 32px; display: inline-block; }
+
+.hidden {
+  display: none;
+}
+
+#ssidcontainer {
+  position: relative;
+  width: 190px; 
+  padding: 0px;
+  margin: 0px;
+}
+
+#ssid {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 999;
+  padding: 0px;
+  margin: 0px;
+}
+
+#netsel {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+input {
+  display: block;
+  border: 1px solid #CCCCCC;
+  border-bottom-width: 2px;
+  height: 30px;
+  background-color: #FFFFFF;
+}
+
+h3 {
+  display: block;
+  height: 30px;
+  font-weight: normal;
+  font-size: 20px;
+  padding: 0px;
+  padding-top: 2px;
+  margin: 0px;
+}
+
+select {
+  display: block;
+  border: 1px solid #CCCCCC;
+  border-bottom-width: 2px;
+  height: 33px;
+  background-color: #FFFFFF;
+  background: url('br_down.png') no-repeat right #FFFFFF;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.button {
+  border: 1px solid #007BA7;
+  border-bottom-width: 3px;
+  height: 30px;
+  background-color: #00AEEF;
+  color: #FFF;
+  font-family: "Open Sans", sans-serif;
+  font-color: #FFF;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 6px;
+  height: 40px;
+  text-decoration: none;
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.button:hover {
+  background-color: #FF8500;
+  border-color: #B15E00;
+}
+
+.button:active {
+  background-color: #E57800;
+}
+
+.button-cancel {
+  background-color: #FF2C00;
+  border-color: #CD2400;
+}
+
+.button-ok {
+  background-color: #ADEF00;
+  border-color: #8BBF00;
+}
+
+.flatbtn { display: block; height: 20px; width: auto; text-decoration: none; background-color: #363636; color: #FFFFFF; padding: 5px; }
+.flatbtn:hover { background-color: #00AEEF; }
+
+/* RED:   background-color: #FF2C00;
+  border-color: #CD2400;
+  color: #FF4822; */
+
+/* http://paletton.com/#uid=33q0u0k++VBrKZTEz+V+VxYZ+pL */
+/* http://highintegritydesign.com/tools/tinter-shader/ */
+/* http://www.dhtmlgoodies.com/scripts/color-schemer/color-schemer.html */

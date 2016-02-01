@@ -1,0 +1,141 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>IKEA Lamp</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="140medley.min.js"></script>
+  <script type="text/javascript">
+    
+  window.onload=function(e) {
+    timezoneset();
+    bootstateset();
+    pkawbset();
+    sensorset();
+  };
+    
+  function timezoneset() {
+    var items = document.getElementsByClassName('tz_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%timezone%') items[i].selected = true;
+    }
+  }
+
+  function sensorset() {
+    var items = document.getElementsByClassName('s1_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor1%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s2_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor2%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s3_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor3%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s4_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor4%') items[i].selected = true;
+    }
+  }
+  
+  function bootstateset() {
+    var items = document.getElementsByClassName('bs_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%bootstate%') items[i].selected = true;
+    }
+  }
+
+  function pkawbset() {
+    var items = document.getElementsByClassName('wb_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%pka_wb%') items[i].selected = true;
+    }
+  }
+
+  function removeOptions(selectbox)
+  {
+      var i;
+      for(i=selectbox.options.length-1;i>=0;i--)
+      {
+          selectbox.remove(i);
+      }
+  }
+  </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>IKEA Lamp</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<div id='notsetupwarning' class='home warning %hidewarning%'>
+<div class='row'>
+  <div class='left bold'>Welcome!</div>
+  <div class='right'>&nbsp;</div>
+</div>
+<div class='row'>
+  <div class='left'>Please configure the wifi settings in the wifi setup.</div>
+  <div class='right'><a class='button' href='/wifi'>Go to setup</a></div>
+</div>
+</div>
+
+<form name="settings" action='/settings/store' method='post'>
+<div class='home wide'>
+  <h2>Device</h2>
+  <div class='row'><div class='left'>Device name</div><div class='right'><input type='text' name='name' value='%name%'></div></div>
+  <hr />
+  <h2>Network</h2>
+  <div class='row'><div class='left'>Hostname&nbsp;<i>[A-Z,a-z,0-9 only. No space]</i></div><div class='right'><input type='text' name='hostname' value='%hostname%'></div></div>
+  <div class='row'><div class='left'>Enable MDNS / bonjour service discovery</div><div class='right'><input type='checkbox' name='enable_mdns' value='1'%enable_mdns%></div></div>
+  <hr />
+  <h2>Security</h2>
+  <i>When set the device will ask for this username and password via http-basic-auth before allowing access to the webinterface.</i>
+  <div class='row'><div class='left'>Enable authentication</div>
+    <div class='right'><input type='checkbox' name='authEnable' value='1'%authEnable%></div>
+  </div>
+  <div class='row'><div class='left'>Username</div><div class='right'><input type='text' name='authUser' value='%authUser%'></div></div>
+  <div class='row'><div class='left'>Password</div><div class='right'><input type='text' name='authPassword' value='%authPassword%'></div></div>
+  <hr />
+  <h2>IKEA Lamp</h2>
+  <div class='row'><div class='left'>Enable WS2801 output</div><div class='right'><input type='checkbox' name='ws2801Enabled' value='1'%ws2801Enabled%></div></div>
+  <div class='row'><div class='left'> - Length of ledstrip</div><div class='right'><input type='text' name='ws2801Length' value='%ws2801Length%'></div></div>
+  <div class='row'>
+    <div class='left'> - Bootstate</div>
+    <div class='right'><input type="text" name="ws2801BootstateB" value="%ws2801BootstateB%" size="3"></div>
+    <div class='right ipdot'>B</div>
+    <div class='right'><input type="text" name="ws2801BootstateG" value="%ws2801BootstateG%" size="3"></div>
+    <div class='right ipdot'>G</div>
+    <div class='right'><input type="text" name="ws2801BootstateR" value="%ws2801BootstateR%" size="3"></div>
+    <div class='right ipdot'>R</div>
+  </div>
+  <div class='row'><div class='left'>Enable WS2812 output</div><div class='right'><input type='checkbox' name='ws2812Enabled' value='1'%ws2812Enabled%></div></div>
+  <div class='row'><div class='left'> - Length of ledstrip</div><div class='right'><input type='text' name='ws2812Length' value='%ws2812Length%'></div></div>
+  <div class='row'>
+    <div class='left'> - Bootstate</div>
+    <div class='right'><input type="text" name="ws2812BootstateB" value="%ws2812BootstateB%" size="3"></div>
+    <div class='right ipdot'>B</div>
+    <div class='right'><input type="text" name="ws2812BootstateG" value="%ws2812BootstateG%" size="3"></div>
+    <div class='right ipdot'>G</div>
+    <div class='right'><input type="text" name="ws2812BootstateR" value="%ws2812BootstateR%" size="3"></div>
+    <div class='right ipdot'>R</div>
+  </div>
+  <hr />
+  <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Save configuration</button></div></div>
+</div>
+</form>
+<br /><br />
+</body>
+</html>

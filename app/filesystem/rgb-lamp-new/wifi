@@ -1,0 +1,181 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>ESPLight</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="140medley.min.js"></script>
+  <script type="text/javascript">
+    
+  window.onload=function(e) {
+    dhcpcelements();
+    scanAPs();
+  };
+  
+  function dhcpcelements() {
+    //Hides DHCP client settings when not needed
+    var items = document.getElementsByClassName('no_dhcpc');
+    if (document.getElementById("enable_dhcp").checked) {
+      for (var i = 0; i < items.length; i++) {
+        items[i].disabled = true;
+      }
+    } else {
+      for (var i = 0; i < items.length; i++) {
+        items[i].disabled = false;
+      }
+    }
+  }
+  
+  var xhr=j();
+  var currAp="%ssid%";
+
+  function createInputForAp(ap) {
+	  if (ap.essid=="" && ap.rssi==0) return;
+	  var rssiVal=-Math.floor(ap.rssi/51)*32;
+	  //rssi.className="icon";
+	  //rssi.style.backgroundPosition="0px "+rssiVal+"px";
+	  //var encrypt=document.createElement("div");
+	  var encVal="-64"; //assume wpa/wpa2
+	  if (ap.enc=="0") encVal="0"; //open
+	  if (ap.enc=="1") encVal="-32"; //wep
+	  //encrypt.className="wifi_icon";
+	  //encrypt.style.backgroundPosition="-32px "+encVal+"px";
+	  
+	  var enclbl="WPA/WPA2"; //assume wpa/wpa2
+	  if (ap.enc=="0") enclbl="OPEN"; //open
+	  if (ap.enc=="1") enclbl="WEP"; //wep
+	  
+	  /* var rssiA=Math.floor(ap.rssi/51);
+	  var rssiB = "|....";
+	  if (rssiA==1) rssiB = "||...";
+	  if (rssiA==2) rssiB = "|||..";
+	  if (rssiA==3) rssiB = "||||.";
+	  if (rssiA==4) rssiB = "|||||"; */
+
+	  document.getElementById("netsel")[document.getElementById("netsel").length] = new Option(ap.essid+' ['+enclbl+'] ['+ap.rssi+']', ap.essid);
+  }
+
+  function getSelectedEssid() {
+	  return document.getElementById("ssid").value;
+  }
+  
+  function setSsid() {
+    var netsel = document.getElementById("netsel");
+    document.getElementById("ssid").value=netsel.options[netsel.selectedIndex].value;
+    netsel.selectedIndex = 0;
+  }
+ 
+  function removeOptions(selectbox)
+  {
+      var i;
+      for(i=selectbox.options.length-1;i>=0;i--)
+      {
+          selectbox.remove(i);
+      }
+  }
+
+  function scanAPs() {
+	  xhr.open("GET", "wifi/scan");
+	  xhr.onreadystatechange=function() {
+		  if (xhr.readyState==4 && xhr.status>=200 && xhr.status<300) {
+			  var data=JSON.parse(xhr.responseText);
+			  currAp=getSelectedEssid();
+			  if (data.result.inProgress=="0" && data.result.APs.length>1) {
+				  removeOptions(document.getElementById("netsel"));
+				  document.getElementById("netsel")[document.getElementById("netsel").length] = new Option('Select a network...', '');
+				  document.getElementById("netsel").options[0].disabled = true;
+				  document.getElementById("netsel").selectedIndex = 0;
+				  for (var i=0; i<data.result.APs.length; i++) {
+					  if (data.result.APs[i].essid=="" && data.result.APs[i].rssi==0) continue;
+					  createInputForAp(data.result.APs[i]);
+				  }
+				  window.setTimeout(scanAPs, 20000);
+			  } else {
+				  window.setTimeout(scanAPs, 1000);
+			  }
+		  }
+	  }
+	  xhr.send();
+  }
+  </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>ESPLight</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<form name="settings" action='/wifi/store' method='post'>
+<div class='home wide'>
+  <div class='row'>
+    <div class='left'>Network</div><div class='right'><div id='ssidcontainer'><input type='text' name='ssid' id='ssid' value='%ssid%' style='width: 164px;'><select id='netsel' onchange="setSsid()" style='width: 190px;'><option value='' disabled>Scanning...</option></select></div></div></div>
+  <div class='row'><div class='left'>Password</div><div class='right'><div id='ssidcontainer'><input type='text' style='width: 185px;' name='password' value='%password%'></div></div></div>
+  <div class='row'><div class='left'>Automatic configuration using DHCP</div><div class='right'><input type="checkbox" name="enable_dhcp" id="enable_dhcp" value="1" onchange="dhcpcelements()"%enable_dhcp%/></div></div>
+  <div class='row'>
+    <div class='left'>Manual IP address</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_4" value="%static_ip_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_3" value="%static_ip_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_2" value="%static_ip_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_1" value="%static_ip_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual Netmask</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_4" value="%static_netmask_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_3" value="%static_netmask_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_2" value="%static_netmask_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_1" value="%static_netmask_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual Gateway</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_4" value="%static_gateway_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_3" value="%static_gateway_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_2" value="%static_gateway_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_1" value="%static_gateway_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual DNS server (1)</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_4" value="%static_dns_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_3" value="%static_dns_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_2" value="%static_dns_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_1" value="%static_dns_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual DNS server (2)</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_4" value="%static_altdns_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_3" value="%static_altdns_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_2" value="%static_altdns_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_1" value="%static_altdns_1%" size="3"></div>
+  </div>
+  <div class='row'>&nbsp;</div>
+  <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Connect</button></div></div>
+</div>
+</form>
+<br /><br />
+</body>
+</html>

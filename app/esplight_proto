@@ -1,0 +1,45 @@
+ESPLIGHT protocol:
+
+"EspFind": Returns name of device as set by user
+"*ESP_ID": Returns "{DEVICE_NAME,FIRMWARE_VERSION,DEVICE_TYPE,<Name of device as set by user>,<Enabled interfaces>,[0:<pwmchannels>,1:<ws2801channels>,2:<ws2812channels>]}"
+"?<statement>&<statement>&<statement>": Command.
+
+---
+Supported command statements:
+"pin": Security PIN, if device is protected using a PIN this statement has to be the first statement sent, in order to authenticate the execution of the other statements in the command.
+
+"effect": Sets the action to be executed. Values are:
+  - '0': Set all leds connected to the selected interfaces to color (R:var0, G:var1, B:var2)
+  - '1': Fading effect (not implemented)
+  - '2': Digital fading / Rainbow (not implemented)
+  - '3': Push color into buffer of selected interfaces (R:var0, G:var1, B:var2)
+  - '4': Set pixel in buffer of selected interfaces (R: var0, G:var1, B:var2, Pixel:pixel)
+  - '5': Send buffer to output (only needed if autoupdate is disabled)
+
+"brightness": Sets the brightness of the color set using var0, var1 and var2
+"pixel": Sets which pixel should be changed
+"interface": Sets which interfaces should be changed
+"autoupdate": Enables or disables the automatic updating of the ledstrips
+
+"var0", "var1", "var2": Variables, usage depends on effect
+
+----
+Interfaces:
+Bit 1: PWM
+Bit 2: WS2801
+Bit 3: WS2812
+Bit 4-16: Reserved
+
+
+----
+
+Examples:
+
+?effect=0&var0=255&var1=255&var2=255&brightness=255&autoupdate=1&interface=7
+ - Sets all leds on all interfaces to white (full brightness)
+
+?effect=0&var0=255&var1=0&var2=0&brightness=255&autoupdate=1&interface=1
+ - Sets PWM output to red (full brightness)
+
+?effect=3&var0=255&var1=0&var2=0&brightness=255&autoupdate=1&interface=2
+ - Pushes a pixel with color "red, full brightness" into the buffer of the WS2801 output

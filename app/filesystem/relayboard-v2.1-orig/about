@@ -1,0 +1,65 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>RN+ WiFi switch</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <script type=\"text/javascript\">
+    function setSsid() {
+      var netsel = document.getElementById(\"netsel\"); document.getElementById(\"ssid\").value=netsel.options[netsel.selectedIndex].value;
+    }
+  </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<div class='home'>
+Firmware version 6<br />
+&copy;&nbsp;Renze Nicolai 2016
+<hr />
+API:<br />
+<table>
+<tr><td>/sensor?temperature=1</td><td>Returns temperature</td></tr>
+<tr><td>/sensor?pressure=1</td><td>Returns air pressure</td></tr>
+<tr><td>/wb?mode=0</td><td>Window blinds: move up</td></tr>
+<tr><td>/wb?mode=1</td><td>Window blinds: move down</td></tr>
+<tr><td>/wb?mode=2</td><td>Window blinds: stop</td></tr>
+<tr><td>/output?pin=<i>pinid</i>&state=1</td><td>Output on</td></tr>
+<tr><td>/output?pin=<i>pinid</i>&state=0</td><td>Output off</td></tr>
+<tr><td>/output/state?pin=<i>pinid</i></td><td>Get state of output</td></tr>
+<tr><td>/input?pin=<i>id</i></td><td>Get state of input (id: 1 to 4)</td></tr>
+</table>
+<hr />
+Valid <i>pinid</i> values for this device:
+<table>
+<tr><td>pinid</td><td>&nbsp;</td></tr>
+<tr><td>90</td><td>Output 1</td></tr>
+<tr><td>91</td><td>Output 2</td></tr>
+<tr><td>92</td><td>Output 3</td></tr>
+</table>
+<hr />
+Valid input <i>id</i> values for this device:
+<table>
+<tr><td>id</td><td>&nbsp;</td></tr>
+<tr><td>1</td><td>Sensor 1</td></tr>
+<tr><td>2</td><td>Sensor 2</td></tr>
+<tr><td>3</td><td>Sensor 3</td></tr>
+<tr><td>4</td><td>Sensor 4</td></tr>
+</table>
+</div>
+</body>
+</html>

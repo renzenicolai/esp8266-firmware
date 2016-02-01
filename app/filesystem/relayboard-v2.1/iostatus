@@ -1,0 +1,83 @@
+<!DOCTYPE html><html>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>RN+ WiFi switch</title>
+  <link href='style.css' rel='stylesheet' type='text/css'>
+  <script>
+    var interval;
+    function get(url) {
+      var xmlhttp;
+      if (window.XMLHttpRequest) {
+        xmlhttp = new XMLHttpRequest();
+      } else {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.open("GET", url, false);
+      xmlhttp.send();
+      return xmlhttp.responseText;
+    }
+    window.onload=function(e) {
+    update();
+    interval = setInterval(function() { update() }, 2000);
+    };
+    function getbulb(state) {
+      if (state=='1') {
+        return "<img src='lightbulb_on.png' />";
+      } else {
+        return "<img src='lightbulb_off.png' />";
+      }
+    }
+    function update() {
+      var temperature = get('/sensor?temperature=1')+"&nbsp;&deg;c";
+      document.getElementById("temperature").innerHTML = temperature;
+      var pressure = get('/sensor?pressure=1')+"&nbsp;kPa";
+      document.getElementById("pressure").innerHTML = pressure;
+      var output1 = get('/output/state?pin=90');
+      document.getElementById("output1").innerHTML = getbulb(output1);
+      var output2 = get('/output/state?pin=91');
+      document.getElementById("output2").innerHTML = getbulb(output2);
+      var output3 = get('/output/state?pin=92');
+      document.getElementById("output3").innerHTML = getbulb(output3);
+      var input1 = get('/input?pin=1');
+      document.getElementById("input1").innerHTML = getbulb(input1);
+      var input2 = get('/input?pin=2');
+      document.getElementById("input2").innerHTML = getbulb(input2);
+      var input3 = get('/input?pin=3');
+      document.getElementById("input3").innerHTML = getbulb(input3);
+      var input4 = get('/input?pin=4');
+      document.getElementById("input4").innerHTML = getbulb(input4);
+    }
+  </script>
+</head>
+<body>
+<div class='header'>
+  <img class='float_left' src='logo.png' />
+  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
+  <div class='float_right'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+  </div>
+</div>
+
+<div class='mobile_menu'>
+    <a href='/'>HOME</a>
+    <a href='/settings'>SETTINGS</a>
+    <a href='/about'>ABOUT</a>
+</div>
+
+<div class='home'>
+  <div class='row'><h1>I/O Status</h1></div>
+  <div class='row'><div class='left'>Temperature</div><div class='right' id='temperature'>%temperature%&nbsp;&deg;c</div></div>
+  <div class='row'><div class='left'>Air pressure</div><div class='right' id='pressure'>%pressure%&nbsp;kPa</div></div>
+  <div class='row'><div class='left'>Output 1</div><div class='bulb' id='output1'>%output1%</div></div>
+  <div class='row'><div class='left'>Output 2</div><div class='bulb' id='output2'>%output2%</div></div>
+  <div class='row'><div class='left'>Output 3</div><div class='bulb' id='output3'>%output3%</div></div>
+  <div class='row'><div class='left'>Input 1</div><div class='bulb' id='input1'>%input1%</div></div>
+  <div class='row'><div class='left'>Input 2</div><div class='bulb' id='input2'>%input2%</div></div>
+  <div class='row'><div class='left'>Input 3</div><div class='bulb' id='input3'>%input3%</div></div>
+  <div class='row'><div class='left'>Input 4</div><div class='bulb' id='input4'>%input4%</div></div>
+</div>
+</body>
+</html>
