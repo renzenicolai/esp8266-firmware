@@ -241,39 +241,153 @@ void ICACHE_FLASH_ATTR setLabelString(char* buff, uint8_t item)
   #endif
 }
 
-void ICACHE_FLASH_ATTR setInputString(char* buff, uint8_t item)
+void ICACHE_FLASH_ATTR setInputString(char* buff, uint8_t item, bool c)
 {
-  bool result = false;
-  #ifdef INPUT1
-    if ((item==1) && (board_getInput(INPUT1))) result = true;
+  bool result = board_getInput(item);
+
+  os_printf("setInputString: %d = %d", item, result);
+
+  if (c) {
+    if (result) {
+      os_sprintf(buff, "fa-check-square-o");
+      os_printf("fa-check-square-o");
+    } else {
+      os_sprintf(buff, "fa-square-o");
+      os_printf("fa-square-o");
+    }
+  } else {
+    if (result) {
+      os_sprintf(buff, "<img src='lightbulb_on.png' />");
+      os_printf("fa-square-o");
+    } else {
+      os_sprintf(buff, "<img src='lightbulb_off.png' />");
+    }
+  }
+  os_printf(" -> %s\n", buff);
+}
+
+void ICACHE_FLASH_ATTR setSwitchUrl(char* buff, uint8_t item)
+{
+  bool normalbutton = false;
+  uint32_t pin = 0;
+  userSettings_t* settings = settings_get_pointer();
+  #ifdef ENABLE_PKAWB
+  if (settings->pka_wb==0) {
   #endif
-  #ifdef INPUT2
-    if ((item==2) && (board_getInput(INPUT2))) result = true;
-  #endif
-  #ifdef INPUT3
-    if ((item==3) && (board_getInput(INPUT3))) result = true;
-  #endif
-  #ifdef INPUT4
-    if ((item==4) && (board_getInput(INPUT4))) result = true;
-  #endif
-  #ifdef INPUT5
-    if ((item==5) && (board_getInput(INPUT5))) result = true;
-  #endif
-  #ifdef INPUT6
-    if ((item==6) && (board_getInput(INPUT6))) result = true;
-  #endif
-  #ifdef INPUT7
-    if ((item==7) && (board_getInput(INPUT7))) result = true;
-  #endif
-  #ifdef INPUT8
-    if ((item==8) && (board_getInput(INPUT8))) result = true;
+    if (item==1) pin = 1;
+    if (item==2) pin = 2;
+    if (item==3) pin = 3;
+    normalbutton = true;
+  #ifdef ENABLE_PKAWB
+  } else {
+    if (item==1) {
+      if (board_wbMode()==2) {
+        if (board_wbState()) {
+          os_sprintf(buff, "/wb?mode=0");
+        } else {
+          os_sprintf(buff, "/wb?mode=1");
+        }
+      } else {
+        os_sprintf(buff, "/wb?mode=2");
+      }
+      return;
+    }
+    if (item==2) {
+      os_sprintf(buff, "#");
+      return;
+    }
+    if (item==3) {
+      switch(settings->pka_wb) {
+        case 4:
+        case 6:
+         pin = 1;
+         normalbutton = true;
+         break;
+        case 2:
+        case 5:
+         pin = 2;
+         normalbutton = true;
+         break;
+        case 1:
+        case 3:
+         pin = 3;
+         normalbutton = true;
+         break;
+      }
+    }
+  }
   #endif
 
-  if (result) {
-    os_sprintf(buff, "<img src='lightbulb_on.png' />");
-  } else {
-    os_sprintf(buff, "<img src='lightbulb_off.png' />");
+  if (normalbutton) {
+    os_sprintf(buff, "/output?pin=%d&state=%d", item, !board_getOutput2(pin));
+    return;
   }
+  os_sprintf(buff, "#");
+  return;
+}
+
+void ICACHE_FLASH_ATTR setSwitchC(char* buff, uint8_t item)
+{
+  bool normalbutton = false;
+  uint32_t pin = 0;
+  userSettings_t* settings = settings_get_pointer();
+  #ifdef ENABLE_PKAWB
+  if (settings->pka_wb==0) {
+  #endif
+    if (item==1) pin = 1;
+    if (item==2) pin = 2;
+    if (item==3) pin = 3;
+    normalbutton = true;
+  #ifdef ENABLE_PKAWB
+  } else {
+    if (item==1) {
+      if (board_wbMode()==2) {
+        if (board_wbState()) {
+          os_sprintf(buff, "fa-caret-square-o-down");
+        } else {
+          os_sprintf(buff, "fa-caret-square-o-up");
+        }
+      } else {
+        os_sprintf(buff, "fa-square");
+      }
+      return;
+    }
+    if (item==2) {
+      os_sprintf(buff, "");
+      return;
+    }
+    if (item==3) {
+      switch(settings->pka_wb) {
+        case 4:
+        case 6:
+         pin = 1;
+         normalbutton = true;
+         break;
+        case 2:
+        case 5:
+         pin = 2;
+         normalbutton = true;
+         break;
+        case 1:
+        case 3:
+         pin = 3;
+         normalbutton = true;
+         break;
+      }
+    }
+  }
+  #endif
+
+  if (normalbutton) {
+    if (board_getOutput2(pin)) {
+      os_sprintf(buff, "fa-circle");
+    } else {
+      os_sprintf(buff, "fa-circle-o");
+    }
+    return;
+  }
+  os_sprintf(buff, "&nbsp;");
+  return;
 }
 
 void ICACHE_FLASH_ATTR setSwitchString(char* buff, uint8_t item)
@@ -284,9 +398,9 @@ void ICACHE_FLASH_ATTR setSwitchString(char* buff, uint8_t item)
   #ifdef ENABLE_PKAWB
   if (settings->pka_wb==0) {
   #endif
-    if (item==1) pin = OUTPUT1;
-    if (item==2) pin = OUTPUT2;
-    if (item==3) pin = OUTPUT3;
+    if (item==1) pin = 1;
+    if (item==2) pin = 2;
+    if (item==3) pin = 3;
     normalbutton = true;
   #ifdef ENABLE_PKAWB
   } else {
@@ -322,17 +436,17 @@ void ICACHE_FLASH_ATTR setSwitchString(char* buff, uint8_t item)
       switch(settings->pka_wb) {
         case 4:
         case 6:
-         pin = OUTPUT1;
+         pin = 1;
          normalbutton = true;
          break;
         case 2:
         case 5:
-         pin = OUTPUT2;
+         pin = 2;
          normalbutton = true;
          break;
         case 1:
         case 3:
-         pin = OUTPUT3;
+         pin = 3;
          normalbutton = true;
          break;
       }
@@ -343,11 +457,11 @@ void ICACHE_FLASH_ATTR setSwitchString(char* buff, uint8_t item)
   if (normalbutton) {
     char text2[4] = "on";
     char text[4] = "OFF";
-    if (board_getOutput(pin)) {
-      os_sprintf(text, "ON");
+    if (board_getOutput2(pin)) {
+      os_sprintf(text, "on");
       os_sprintf(text2, "off");
     }
-    os_sprintf(buff, "<a class='button' href='/output?pin=%d&state=%d'>[%s] Switch %s</a>", pin, !board_getOutput(pin), text, text2);
+    os_sprintf(buff, "<a class='button' href='/output?pin=%d&state=%d'>[%s] Switch %s</a>", pin, !board_getOutput2(pin), text, text2);
     return;
   }
   os_sprintf(buff, "&nbsp;");
@@ -390,9 +504,21 @@ int ICACHE_FLASH_ATTR tplHomepage(HttpdConnData *connData, char *token, void **a
     if (os_strcmp(token, t)==0) {
       setSwitchString(buff, c);
     }
+    os_sprintf(t, "output%dlink", c);
+    if (os_strcmp(token, t)==0) {
+      setSwitchUrl(buff, c);
+    }
+    os_sprintf(t, "output%dc", c);
+    if (os_strcmp(token, t)==0) {
+      setSwitchC(buff, c);
+    }
     os_sprintf(t, "input%d", c);
     if (os_strcmp(token, t)==0) {
-      setInputString(buff, c);
+      setInputString(buff, c, false);
+    }
+    os_sprintf(t, "input%dc", c);
+    if (os_strcmp(token, t)==0) {
+      setInputString(buff, c, true);
     }
   }
   if (os_strcmp(token, "hidewarning")==0) {
@@ -441,11 +567,15 @@ int ICACHE_FLASH_ATTR cgiGetOutput(HttpdConnData *connData) {
   os_sprintf(buff, "ERROR" );
   len=httpdFindArg(connData->post->buff, "pin", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "pin", buff, sizeof(buff));
-  if (len>0) os_sprintf(buff, "%d", board_getOutput(atoi(buff)));
+  if (len>0) os_sprintf(buff, "%d", board_getOutput2(atoi(buff)));
 
   len=httpdFindArg(connData->post->buff, "switchstring", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "switchstring", buff, sizeof(buff));
   if (len>0) setSwitchString(buff, atoi(buff));
+
+  len=httpdFindArg(connData->post->buff, "switchstringC", buff, sizeof(buff));
+  if (len<=0) len=httpdFindArg(connData->getArgs, "switchstringC", buff, sizeof(buff));
+  if (len>0) setSwitchC(buff, atoi(buff));
 
   httpdSend(connData, buff, strlen(buff));
   return HTTPD_CGI_DONE;
@@ -485,7 +615,7 @@ int ICACHE_FLASH_ATTR cgiSetOutput(HttpdConnData *connData) {
   if (len<=0) len=httpdFindArg(connData->getArgs, "state", buff, sizeof(buff));
   if (len>0) state=atoi(buff);
 
-  bool result = board_setOutput(pin, state);
+  bool result = board_setOutput2(pin, state);
 
   len=httpdFindArg(connData->post->buff, "cmd", buff, sizeof(buff));
   if (len<=0) len=httpdFindArg(connData->getArgs, "cmd", buff, sizeof(buff));

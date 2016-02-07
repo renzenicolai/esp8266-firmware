@@ -1,10 +1,86 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset='UTF-8' />
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <title>RN+ WiFi switch</title>
-  <link href='style.css' rel='stylesheet' type='text/css'>
-  <script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Connecting... - %hostname%</title>
+    <link href="bstheme/bootstrap.min.css" rel="stylesheet">
+    <link href="bstheme/metisMenu.min.css" rel="stylesheet">
+    <link href="bstheme/timeline.css" rel="stylesheet">
+    <link href="bstheme/sb-admin-2.css" rel="stylesheet">
+    <link href="bstheme/morris.css" rel="stylesheet">
+    <link href="bstheme/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/home">%hostname%</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <!-- /.navbar-top-links -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Connection status</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+  <div class='row'>
+    <div class='left' id='output'><noscript>The device will now attempt to connect to your WiFi network.<br /><i>(Please enable javascript for more details.)</i></noscript></div>
+  </div>
+  <div class='row'>
+    <div class='right' id='output2'>&nbsp;</div><div class='right' id='output3'>&nbsp;</div>
+  </div>
+
+</div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="bstheme/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="bstheme/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="bstheme/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="bstheme/sb-admin-2.js"></script>
+
+  <script type="text/javascript">
+
     var interval;
     function get(url) {
       var xmlhttp;
@@ -37,45 +113,7 @@
       document.getElementById("output3").innerHTML = output3;
     }
   </script>
-</head>
-<body>
-<div class='header'>
-  <img class='float_left' src='logo.png' />
-  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
-</div>
-
-<div id='content'>
-<div class='home' style='margin-top: 100px; padding-bottom: 30px;'>
-  <div class='row'>
-    <div class='left' id='output'><noscript>The device will now attempt to connect to your WiFi network.<br /><i>(Please enable javascript for more details.)</i></noscript></div>
-  </div>
-  <div class='row'>
-    <div class='right' id='output2'>&nbsp;</div><div class='right' id='output3'>&nbsp;</div>
-  </div>
-</div>
-</div>
-
-<!--
-
-<div class='home' style='margin-top: 100px;'>
-  <div class='row'>
-    <div class='left'>Connecting to your WiFi network...</div>
-  </div>
-</div>
-
-<div class='home' style='margin-top: 100px;'>
-  <div class='row' style='height: 100px;">
-    <div class='left'>Successfully connected to your WiFi network!<br />The setup network will be disabled. To reconnect to the device please use the information provided below.<br /><br /><strong>You can reach the device by visiting '%hostname%' or by typing in the IP address of this device '%ip%'.</strong></div>
-  </div>
-</div>
-
-<div class='home warning' style='margin-top: 100px;'>
-  <div class='row'>
-    <div class='left'>Could not connect to your WiFi network!</div>
-    <div class='right'><a class='button' href='/settings'>Back to setup</a></div>
-  </div>
-</div>
--->
 
 </body>
+
 </html>

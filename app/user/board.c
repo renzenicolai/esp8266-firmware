@@ -367,28 +367,28 @@ void ICACHE_FLASH_ATTR board_handle_gpio_interrupt( int8_t key )
 bool ICACHE_FLASH_ATTR board_getInput( uint8_t input )
 {
   #if BUTTON1>=0 && BUTTON1<20
-  if ((!GPIO_INPUT_GET(BUTTON1))&&(input==0)) return true;
+  if ((input==0)&&(!GPIO_INPUT_GET(BUTTON1))) return true;
   #endif
   #if BUTTON2>=0 && BUTTON2<20
-  if ((!GPIO_INPUT_GET(BUTTON2))&&(input==1)) return true;
+  if ((input==1)&&(!GPIO_INPUT_GET(BUTTON2))) return true;
   #endif
   #if BUTTON3>=0 && BUTTON3<20
-  if ((!GPIO_INPUT_GET(BUTTON3))&&(input==2)) return true;
+  if ((input==2)&&(!GPIO_INPUT_GET(BUTTON3))) return true;
   #endif
   #if BUTTON4>=0 && BUTTON4<20
-  if ((!GPIO_INPUT_GET(BUTTON4))&&(input==3)) return true;
+  if ((input==3)&&(!GPIO_INPUT_GET(BUTTON4))) return true;
   #endif
   #if BUTTON5>=0 && BUTTON5<20
-  if ((!GPIO_INPUT_GET(BUTTON5))&&(input==4)) return true;
+  if ((input==4)&&(!GPIO_INPUT_GET(BUTTON5))) return true;
   #endif
   #if BUTTON6>=0 && BUTTON6<20
-  if ((!GPIO_INPUT_GET(BUTTON6))&&(input==5)) return true;
+  if ((input==5)&&(!GPIO_INPUT_GET(BUTTON6))) return true;
   #endif
   #if BUTTON7>=0 && BUTTON7<20
-  if ((!GPIO_INPUT_GET(BUTTON7))&&(input==6)) return true;
+  if ((input==6)&&(!GPIO_INPUT_GET(BUTTON7))) return true;
   #endif
   #if BUTTON8>=0 && BUTTON8<20
-  if ((!GPIO_INPUT_GET(BUTTON8))&&(input==7)) return true;
+  if ((input==7)&&(!GPIO_INPUT_GET(BUTTON8))) return true;
   #endif
 
   #ifdef I2C_MCP
@@ -486,6 +486,32 @@ void ICACHE_FLASH_ATTR board_applybootstate( userSettings_t *settings )
 
 uint32_t outputState = 0;
 uint32_t MCPoutputState = 0;
+
+bool board_getOutput2( uint8_t pin )
+{
+  if (pin==1) return board_getOutput(OUTPUT1);
+  if (pin==2) return board_getOutput(OUTPUT2);
+  if (pin==3) return board_getOutput(OUTPUT3);
+  if (pin==4) return board_getOutput(OUTPUT4);
+  if (pin==5) return board_getOutput(OUTPUT5);
+  if (pin==6) return board_getOutput(OUTPUT6);
+  if (pin==7) return board_getOutput(OUTPUT7);
+  if (pin==8) return board_getOutput(OUTPUT8);
+  return false;
+}
+
+bool board_setOutput2( uint8_t pin, bool state )
+{
+  if (pin==1) return board_setOutput(OUTPUT1, state);
+  if (pin==2) return board_setOutput(OUTPUT2, state);
+  if (pin==3) return board_setOutput(OUTPUT3, state);
+  if (pin==4) return board_setOutput(OUTPUT4, state);
+  if (pin==5) return board_setOutput(OUTPUT5, state);
+  if (pin==6) return board_setOutput(OUTPUT6, state);
+  if (pin==7) return board_setOutput(OUTPUT7, state);
+  if (pin==8) return board_setOutput(OUTPUT8, state);
+  return false;
+}
 
 bool board_setOutput( int output, bool state )
 {

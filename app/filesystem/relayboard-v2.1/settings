@@ -1,85 +1,75 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset='UTF-8' />
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <title>RN+ WiFi switch</title>
-  <link href='style.css' rel='stylesheet' type='text/css'>
-  <script type="text/javascript" src="140medley.min.js"></script>
-  <script type="text/javascript">
-    
-  window.onload=function(e) {
-    timezoneset();
-    bootstateset();
-    pkawbset();
-    sensorset();
-  };
-    
-  function timezoneset() {
-    var items = document.getElementsByClassName('tz_option');
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].value=='%timezone%') items[i].selected = true;
-    }
-  }
-
-  function sensorset() {
-    var items = document.getElementsByClassName('s1_option');
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].value=='%actSensor1%') items[i].selected = true;
-    }
-    items = document.getElementsByClassName('s2_option');
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].value=='%actSensor2%') items[i].selected = true;
-    }
-    items = document.getElementsByClassName('s3_option');
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].value=='%actSensor3%') items[i].selected = true;
-    }
-    items = document.getElementsByClassName('s4_option');
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].value=='%actSensor4%') items[i].selected = true;
-    }
-  }
-  
-  function bootstateset() {
-    var items = document.getElementsByClassName('bs_option');
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].value=='%bootstate%') items[i].selected = true;
-    }
-  }
-
-  function pkawbset() {
-    var items = document.getElementsByClassName('wb_option');
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].value=='%pka_wb%') items[i].selected = true;
-    }
-  }
-
-  function removeOptions(selectbox)
-  {
-      var i;
-      for(i=selectbox.options.length-1;i>=0;i--)
-      {
-          selectbox.remove(i);
-      }
-  }
-  </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Settings - %hostname%</title>
+    <link href="bstheme/bootstrap.min.css" rel="stylesheet">
+    <link href="bstheme/metisMenu.min.css" rel="stylesheet">
+    <link href="bstheme/timeline.css" rel="stylesheet">
+    <link href="bstheme/sb-admin-2.css" rel="stylesheet">
+    <link href="bstheme/morris.css" rel="stylesheet">
+    <link href="bstheme/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class='header'>
-  <img class='float_left' src='logo.png' />
-  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
-  <div class='float_right'>
-    <a href='/'>HOME</a>
-    <a href='/settings'>SETTINGS</a>
-    <a href='/about'>ABOUT</a>
-  </div>
-</div>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/home">%hostname%</a>
+            </div>
+            <!-- /.navbar-header -->
 
-<div class='mobile_menu'>
-    <a href='/'>HOME</a>
-    <a href='/settings'>SETTINGS</a>
-    <a href='/about'>ABOUT</a>
-</div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li><a href="/settings"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <!--<li>
+                            <a href="/sensors"><i class="fa fa-bar-chart-o fa-fw"></i> Sensors</span></a>
+                        </li>
+                        <li>
+                            <a href="/iostatus"><i class="fa fa-table fa-fw"></i> I/O status</a>
+                        </li>-->
+                        <li>
+                            <a href="/about"><i class="fa fa-info fa-fw"></i> About</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Settings</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
 
 <div id='notsetupwarning' class='home warning %hidewarning%'>
 <div class='row'>
@@ -93,7 +83,6 @@
 </div>
 
 <form name="settings" action='/settings/store' method='post'>
-<div class='home wide'>
   <h2>Device</h2>
   <div class='row'><div class='left'>Device name</div><div class='right'><input type='text' name='name' value='%name%'></div></div>
   <hr />
@@ -328,8 +317,93 @@
   </div>
   <hr />-->
   <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Save configuration</button></div></div>
-</div>
 </form>
-<br /><br />
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="bstheme/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="bstheme/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="bstheme/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="bstheme/sb-admin-2.js"></script>
+
+<script>
+    
+  window.onload=function(e) {
+    timezoneset();
+    bootstateset();
+    pkawbset();
+    sensorset();
+  };
+    
+  function timezoneset() {
+    var items = document.getElementsByClassName('tz_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%timezone%') items[i].selected = true;
+    }
+  }
+
+  function sensorset() {
+    var items = document.getElementsByClassName('s1_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor1%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s2_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor2%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s3_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor3%') items[i].selected = true;
+    }
+    items = document.getElementsByClassName('s4_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%actSensor4%') items[i].selected = true;
+    }
+  }
+  
+  function bootstateset() {
+    var items = document.getElementsByClassName('bs_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%bootstate%') items[i].selected = true;
+    }
+  }
+
+  function pkawbset() {
+    var items = document.getElementsByClassName('wb_option');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].value=='%pka_wb%') items[i].selected = true;
+    }
+  }
+
+  function removeOptions(selectbox)
+  {
+      var i;
+      for(i=selectbox.options.length-1;i>=0;i--)
+      {
+          selectbox.remove(i);
+      }
+  }
+  </script>
+
 </body>
+
 </html>

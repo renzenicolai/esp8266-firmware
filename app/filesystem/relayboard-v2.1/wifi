@@ -1,10 +1,158 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset='UTF-8' />
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <title>RN+ WiFi switch</title>
-  <link href='style.css' rel='stylesheet' type='text/css'>
-  <script type="text/javascript" src="140medley.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Wifi settings - %hostname%</title>
+    <link href="bstheme/bootstrap.min.css" rel="stylesheet">
+    <link href="bstheme/metisMenu.min.css" rel="stylesheet">
+    <link href="bstheme/timeline.css" rel="stylesheet">
+    <link href="bstheme/sb-admin-2.css" rel="stylesheet">
+    <link href="bstheme/morris.css" rel="stylesheet">
+    <link href="bstheme/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/home">%hostname%</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li><a href="/settings"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <!--<li>
+                            <a href="/sensors"><i class="fa fa-bar-chart-o fa-fw"></i> Sensors</span></a>
+                        </li>
+                        <li>
+                            <a href="/iostatus"><i class="fa fa-table fa-fw"></i> I/O status</a>
+                        </li>-->
+                        <li>
+                            <a href="/about"><i class="fa fa-info fa-fw"></i> About</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Wifi settings</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+<form name="settings" action='/wifi/store' method='post'>
+  <div class='row'>
+    <div class='left'>Network</div><div class='right'><div id='ssidcontainer'><input type='text' name='ssid' id='ssid' value='%ssid%' style='width: 164px;'><select id='netsel' onchange="setSsid()" style='width: 190px;'><option value='' disabled>Scanning...</option></select></div></div></div>
+  <div class='row'><div class='left'>Password</div><div class='right'><div id='ssidcontainer'><input type='text' style='width: 185px;' name='password' value='%password%'></div></div></div>
+  <div class='row'><div class='left'>Automatic configuration using DHCP</div><div class='right'><input type="checkbox" name="enable_dhcp" id="enable_dhcp" value="1" onchange="dhcpcelements()"%enable_dhcp%/></div></div>
+  <div class='row'>
+    <div class='left'>Manual IP address</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_4" value="%static_ip_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_3" value="%static_ip_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_2" value="%static_ip_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_1" value="%static_ip_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual Netmask</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_4" value="%static_netmask_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_3" value="%static_netmask_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_2" value="%static_netmask_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_1" value="%static_netmask_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual Gateway</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_4" value="%static_gateway_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_3" value="%static_gateway_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_2" value="%static_gateway_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_1" value="%static_gateway_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual DNS server (1)</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_4" value="%static_dns_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_3" value="%static_dns_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_2" value="%static_dns_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_1" value="%static_dns_1%" size="3"></div>
+  </div>
+  <div class='row'>
+    <div class='left'>Manual DNS server (2)</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_4" value="%static_altdns_4%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_3" value="%static_altdns_3%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_2" value="%static_altdns_2%" size="3"></div>
+    <div class='right ipdot'>.</div>
+    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_1" value="%static_altdns_1%" size="3"></div>
+  </div>
+  <div class='row'>&nbsp;</div>
+  <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Connect</button></div></div>
+</form></div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="bstheme/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="bstheme/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="bstheme/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="bstheme/sb-admin-2.js"></script>
+
   <script type="text/javascript">
     
   window.onload=function(e) {
@@ -98,84 +246,7 @@
 	  xhr.send();
   }
   </script>
-</head>
-<body>
-<div class='header'>
-  <img class='float_left' src='logo.png' />
-  <div class='float_left'><h1><span class='logo1'>R</span>N+</h1><h2>WiFi switch</h2></div>
-  <div class='float_right'>
-    <a href='/'>HOME</a>
-    <a href='/settings'>SETTINGS</a>
-    <a href='/about'>ABOUT</a>
-  </div>
-</div>
 
-<div class='mobile_menu'>
-    <a href='/'>HOME</a>
-    <a href='/settings'>SETTINGS</a>
-    <a href='/about'>ABOUT</a>
-</div>
-
-<form name="settings" action='/wifi/store' method='post'>
-<div class='home wide'>
-  <div class='row'>
-    <div class='left'>Network</div><div class='right'><div id='ssidcontainer'><input type='text' name='ssid' id='ssid' value='%ssid%' style='width: 164px;'><select id='netsel' onchange="setSsid()" style='width: 190px;'><option value='' disabled>Scanning...</option></select></div></div></div>
-  <div class='row'><div class='left'>Password</div><div class='right'><div id='ssidcontainer'><input type='text' style='width: 185px;' name='password' value='%password%'></div></div></div>
-  <div class='row'><div class='left'>Automatic configuration using DHCP</div><div class='right'><input type="checkbox" name="enable_dhcp" id="enable_dhcp" value="1" onchange="dhcpcelements()"%enable_dhcp%/></div></div>
-  <div class='row'>
-    <div class='left'>Manual IP address</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_4" value="%static_ip_4%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_3" value="%static_ip_3%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_2" value="%static_ip_2%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_ip_1" value="%static_ip_1%" size="3"></div>
-  </div>
-  <div class='row'>
-    <div class='left'>Manual Netmask</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_4" value="%static_netmask_4%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_3" value="%static_netmask_3%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_2" value="%static_netmask_2%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_netmask_1" value="%static_netmask_1%" size="3"></div>
-  </div>
-  <div class='row'>
-    <div class='left'>Manual Gateway</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_4" value="%static_gateway_4%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_3" value="%static_gateway_3%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_2" value="%static_gateway_2%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_gateway_1" value="%static_gateway_1%" size="3"></div>
-  </div>
-  <div class='row'>
-    <div class='left'>Manual DNS server (1)</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_4" value="%static_dns_4%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_3" value="%static_dns_3%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_2" value="%static_dns_2%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_dns_1" value="%static_dns_1%" size="3"></div>
-  </div>
-  <div class='row'>
-    <div class='left'>Manual DNS server (2)</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_4" value="%static_altdns_4%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_3" value="%static_altdns_3%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_2" value="%static_altdns_2%" size="3"></div>
-    <div class='right ipdot'>.</div>
-    <div class='right'><input class="no_dhcpc" type="text" name="static_altdns_1" value="%static_altdns_1%" size="3"></div>
-  </div>
-  <div class='row'>&nbsp;</div>
-  <div class='row'><div class='left'>&nbsp;</div><div class='right'><button type='submit' class='button'>Connect</button></div></div>
-</div>
-</form>
-<br /><br />
 </body>
+
 </html>

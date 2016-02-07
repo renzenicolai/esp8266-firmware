@@ -5,7 +5,9 @@
 
 void board_init1( void );
 void board_init2( void );
+bool board_setOutput2( uint8_t pin, bool state );
 bool board_setOutput( int output, bool state );
+bool board_getOutput2( uint8_t pin );
 bool board_getOutput( int output );
 bool board_getInput( uint8_t input );
 int32_t board_sensorGetAirPressure ( void );

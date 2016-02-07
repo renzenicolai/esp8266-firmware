@@ -227,7 +227,9 @@ void system_init_done(void)
     //artnet_init(); //Start ARTNET receiver
   #endif
   init_drivers();
-  rainbow_init(); //Only needs to be initialized once
+  #ifdef RAINBOW
+    rainbow_init(); //Only needs to be initialized once
+  #endif
   os_printf("Services started.\r\n");
 }
 

@@ -64,7 +64,7 @@ time = 6; while(time--) GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << WS2812PIN);
     WRITE_PERI_REG( PERIPHS_GPIO_BASEADDR + 8, theport );
 
     //while (repetition--) {
-      for( i = 0; i < amount; i++ ) {
+      for( i = 0; i < amount*3; i++ ) {
         uint8_t mask = 0x80;
         uint8_t byte = ws2812buffer[i];
         while (mask) {
